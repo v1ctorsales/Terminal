@@ -1,0 +1,23 @@
+body{
+    background-color: rgb(32, 32, 32);
+    color: rgb(0, 255, 0);
+    font-family: 'VT323', monospace;
+}
+
+input{
+    background-color: rgb(32, 32, 32);
+    box-shadow: none;
+    border: 0;
+    width: 50%;
+    color: rgb(0, 255, 0);
+}
+
+input:focus{
+    background-color: rgb(32, 32, 32);
+    box-shadow: none;
+    outline: none;
+}
+
+form {
+    display: inline;
+}
