@@ -1,7 +1,10 @@
+html{
+    color: rgb(110, 247, 110);
+    font-family: 'VT323', monospace;
+}
+
 body{
     background-color: rgb(32, 32, 32);
-    color: rgb(0, 255, 0);
-    font-family: 'VT323', monospace;
 }
 
 input{
@@ -9,7 +12,9 @@ input{
     box-shadow: none;
     border: 0;
     width: 50%;
-    color: rgb(0, 255, 0);
+    color: rgb(110, 247, 110);
+    font-family: 'VT323', monospace;
+
 }
 
 input:focus{
@@ -20,4 +25,13 @@ input:focus{
 
 form {
     display: inline;
+}
+
+.padrao{
+    margin-block-start: 1em;
+    margin-block-end: 1em;;
+}
+
+.textoerro{
+    color: red;
 }
