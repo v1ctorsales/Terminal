@@ -32,7 +32,7 @@ function resHelp(){
 function resColor(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao color: :'  +
+  div.innerHTML = 'Lista de comandos disponíveis junto ao color:'  +
   '<br/>color green' +
   '<br/>color red' +
   '<br/>color blue' +
