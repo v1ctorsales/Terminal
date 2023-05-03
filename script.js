@@ -22,6 +22,7 @@ function resHelp(){
   '<br/>clear' +
   '<br/>color' +
   '<br/>help' +
+  '<br/>lang' +
   '<br/>mp3' +
   '<br/>mp4' +
   '<br/>sobre'
@@ -38,7 +39,8 @@ function resColor(){
   '<br/>color blue' +
   '<br/>color white' +
   '<br/>color pink' +
-  '<br/>color orange'
+  '<br/>color orange'+
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Estes comandos são utilizados para trocar a cor dos textos no terminal. ' 
   document.getElementById("padrao2").append(div);
 }
 
@@ -75,6 +77,16 @@ function resColorOrange(){
 function resClear(){
   let padrao2 = document.getElementById('padrao2')[0];
   padrao2.innerHTML = "";
+}
+
+function resLang(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Lista de comandos disponíveis junto ao lang:'  +
+  '<br/>lang ptbr' +
+  '<br/>lang eng' +
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Estes comandos são utilizados para trocar o idioma dos textos no terminal. ' 
+  document.getElementById("padrao2").append(div);
 }
 
 function resSobre(){
@@ -154,6 +166,13 @@ function validateForm() {
     else if (x == "mp3") {
       divPadrao(x);
       resMp3();
+      _input.value= "";
+      return false;
+    }
+
+    else if (x == "lang" || x == "idioma" || x == "language" || x == "lingua") {
+      divPadrao(x);
+      resLang();
       _input.value= "";
       return false;
     }
