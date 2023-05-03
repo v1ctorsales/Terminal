@@ -14,7 +14,7 @@ input{
     width: 50%;
     color: rgb(110, 247, 110);
     font-family: 'VT323', monospace;
-
+    font-size: 16px;
 }
 
 input:focus{
@@ -38,6 +38,7 @@ form {
 
 .logostl{
     top: 50%;
-    left: 70%;
+    left: 75%;
     position: absolute;
+    z-index: -2;
 }

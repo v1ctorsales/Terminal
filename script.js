@@ -12,7 +12,7 @@ function comandoInvalido(x){
   div.classList.add('padrao');
   div.innerHTML = "victorsales\\portifolio\\terminal\\ > " + x + error;
   document.getElementById("padrao2").append(div);
-  alert("Comando inválido");
+  //alert("Comando inválido");
 }
 
 function resHelp(){
@@ -21,7 +21,10 @@ function resHelp(){
   div.innerHTML = 'victorsales\\portifolio\\terminal\\ > Lista de todos os comandos disponíveis :' +
   '<br/>clear' +
   '<br/>color' +
-  '<br/>help'
+  '<br/>help' +
+  '<br/>mp3' +
+  '<br/>mp4' +
+  '<br/>sobre'
 
   document.getElementById("padrao2").append(div);
 }
@@ -30,12 +33,12 @@ function resColor(){
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'Lista de comandos disponíveis junto ao color: :'  +
-  '<br/>green' +
-  '<br/>red' +
-  '<br/>blue' +
-  '<br/>white' +
-  '<br/>pink' +
-  '<br/>orange'
+  '<br/>color green' +
+  '<br/>color red' +
+  '<br/>color blue' +
+  '<br/>color white' +
+  '<br/>color pink' +
+  '<br/>color orange'
   document.getElementById("padrao2").append(div);
 }
 
@@ -60,8 +63,8 @@ function resColorWhite(){
 }
 
 function resColorPink(){
-  document.documentElement.style.color="pink";
-  document.getElementsByTagName('input')[0].style.color="pink";
+  document.documentElement.style.color="#fc03ad";
+  document.getElementsByTagName('input')[0].style.color="#fc03ad";
 }
 
 function resColorOrange(){
@@ -74,12 +77,21 @@ function resClear(){
   padrao2.innerHTML = "";
 }
 
+function resSobre(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Mais informações sobre este sistema:' +
+  '<br/><br/>O Terminal Walkman foi desenvolvido por Victor Sales e tem o intuito de reunir informações sobre o desenvolvedor.' +
+  '<br/>O aplicativo foi desenvolvido com HTML, CSS e JavaScript'
+  document.getElementById("padrao2").append(div);
+}
+
 function validateForm() {
     let x = document.forms["myForm"]["fname"].value;
     let _input = document.getElementsByName('fname')[0];
     x = x.toLowerCase();
 
-    if (x == "help") {
+    if (x == "help" || x == "ajuda") {
       divPadrao(x);
       resHelp();
       _input.value= "";
@@ -130,6 +142,18 @@ function validateForm() {
     else if (x == "clear" || x== "cls") {
       divPadrao(x);
       resClear();
+      _input.value= "";
+      return false;
+    }
+    else if (x == "sobre" || x=="about") {
+      divPadrao(x);
+      resSobre();
+      _input.value= "";
+      return false;
+    }
+    else if (x == "mp3") {
+      divPadrao(x);
+      resMp3();
       _input.value= "";
       return false;
     }
