@@ -22,10 +22,10 @@ function resHelp(){
   '<br/>clear' +
   '<br/>color' +
   '<br/>help' +
+  '<br/>ip' +
   '<br/>lang' +
   '<br/>mp3' +
   '<br/>mp4' +
-  '<br/>netinfo' +
   '<br/>sobre'
 
   document.getElementById("padrao2").append(div);
@@ -94,7 +94,8 @@ function resSobre(){
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'Mais informações sobre este sistema:' +
-  '<br/><br/>O Terminal Walkman foi desenvolvido por Victor Sales e tem o intuito de reunir informações sobre o desenvolvedor.' +
+  '<br/><br/>O Terminal Walkman foi desenvolvido por Victor Sales e tem o intuito de reunir ferramentas úteis para o desenvolvedor.' +
+  '<br/>Quem sabe você não encontra algo últi pra você também?'+
   '<br/>O aplicativo foi desenvolvido com HTML, CSS e JavaScript'
   document.getElementById("padrao2").append(div);
 }
@@ -103,9 +104,15 @@ function resNetInfo(){
   $.getJSON('https://api.db-ip.com/v2/free/self', function(data) {
     console.log(JSON.stringify(data, null, 2));
     console.log(data);
+    newdata = JSON.stringify(data)
+    newdata2 = newdata.split("{").join("")
+    newdata2 = newdata2.split("}").join("")
+    newdata2 = newdata2.split('"').join('')
+    newdata2 = newdata2.split(':').join(' : ')
+    newdata2 = newdata2.split(",").join("<br />")
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = JSON.stringify(data, null, 2)
+  div.innerHTML = newdata2
   document.getElementById("padrao2").append(div);
 });
 }
@@ -189,7 +196,7 @@ function validateForm() {
       return false;
     }
 
-    else if (x == "netinfo" || x=="ipconfig") {
+    else if (x == "netinfo" || x=="ipconfig" || x=="ip") {
       divPadrao(x);
       resNetInfo();
       _input.value= "";
