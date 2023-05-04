@@ -99,7 +99,9 @@ function resSobre(){
 }
 
 function resNetInfo(){
-  $.getJSON('https://json.geoiplookup.io/?callback=?', function(data) {
+  $.getJSON('https://api.db-ip.com/v2/free/self', function(data) {
+    console.log(JSON.stringify(data, null, 2));
+    console.log(data);
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = JSON.stringify(data, null, 2)
