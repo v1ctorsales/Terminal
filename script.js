@@ -98,6 +98,15 @@ function resSobre(){
   document.getElementById("padrao2").append(div);
 }
 
+function resNetInfo(){
+  $.getJSON('https://json.geoiplookup.io/?callback=?', function(data) {
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = JSON.stringify(data, null, 2)
+  document.getElementById("padrao2").append(div);
+});
+}
+
 function validateForm() {
     let x = document.forms["myForm"]["fname"].value;
     let _input = document.getElementsByName('fname')[0];
@@ -173,6 +182,13 @@ function validateForm() {
     else if (x == "lang" || x == "idioma" || x == "language" || x == "lingua") {
       divPadrao(x);
       resLang();
+      _input.value= "";
+      return false;
+    }
+
+    else if (x == "netinfo" || x=="ipconfig") {
+      divPadrao(x);
+      resNetInfo();
       _input.value= "";
       return false;
     }
