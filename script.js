@@ -220,16 +220,16 @@ function validateForm() {
       _input.value= "";
       return false;
     }
-    else if (x.includes("mp4")) {
-      divPadrao(x);
-      duvidaMp4();
-      _input.value= "";
-      return false;
-    }
     else if (x.includes("mp4 ")) {
       divPadrao(x);
       pegarID(x);
       //resMp4();
+      _input.value= "";
+      return false;
+    }
+    else if (x.includes("mp4")) {
+      divPadrao(x);
+      duvidaMp4();
       _input.value= "";
       return false;
     }
