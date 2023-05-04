@@ -25,6 +25,7 @@ function resHelp(){
   '<br/>lang' +
   '<br/>mp3' +
   '<br/>mp4' +
+  '<br/>netinfo' +
   '<br/>sobre'
 
   document.getElementById("padrao2").append(div);
