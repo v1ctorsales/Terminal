@@ -23,8 +23,8 @@ function resHelp(){
   '<br/>color' +
   '<br/>help' +
   '<br/>ip' +
-  '<br/>lang' +
-  '<br/>mp3' +
+  //'<br/>lang' +
+  //'<br/>mp3' +
   '<br/>mp4' +
   '<br/>sobre'
 
@@ -117,10 +117,48 @@ function resNetInfo(){
 });
 }
 
+function pegarID(_url){
+  newurl = _url.split('mp4 ').join('');
+  newurl = newurl.match(/([a-z0-9_-]{11})/gim)[0]
+ resMp4(newurl)
+}
+
+function duvidaMp4(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Lista de comandos disponíveis junto ao mp4:'  +
+  '<br/>mp4 + [URL DO YOUTUBE]' +
+  '<br/>ex: mp4 https://youtu.be/3ZnHr62W72Q' +
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube. ' 
+  document.getElementById("padrao2").append(div);
+}
+
+function resMp4(video_id){
+const settings = {
+	async: true,
+	crossDomain: true,
+	url: 'https://ytstream-download-youtube-videos.p.rapidapi.com/dl?id='+video_id, //UxxajLWwzqY',
+	method: 'GET',
+	headers: {
+		'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+		'X-RapidAPI-Host': 'ytstream-download-youtube-videos.p.rapidapi.com'
+	}
+};
+
+$.ajax(settings).done(function (response) {
+	console.log(response);
+  console.log(response.formats[2].url)
+  window.open(response.formats[2].url,'_blank');
+});
+}
+
 function validateForm() {
     let x = document.forms["myForm"]["fname"].value;
     let _input = document.getElementsByName('fname')[0];
-    x = x.toLowerCase();
+    if(!x.includes("mp4 ")){
+      x = x.toLowerCase();
+    }
+    else{}
 
     if (x == "help" || x == "ajuda") {
       divPadrao(x);
@@ -182,9 +220,16 @@ function validateForm() {
       _input.value= "";
       return false;
     }
-    else if (x == "mp3") {
+    else if (x.includes("mp4")) {
       divPadrao(x);
-      resMp3();
+      duvidaMp4();
+      _input.value= "";
+      return false;
+    }
+    else if (x.includes("mp4 ")) {
+      divPadrao(x);
+      pegarID(x);
+      //resMp4();
       _input.value= "";
       return false;
     }
@@ -202,7 +247,6 @@ function validateForm() {
       _input.value= "";
       return false;
     }
-    
 
     else {
       comandoInvalido(x);
