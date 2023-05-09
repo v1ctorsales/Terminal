@@ -95,26 +95,33 @@ function resSobre(){
   div.classList.add('padrao');
   div.innerHTML = 'Mais informações sobre este sistema:' +
   '<br/><br/>O Terminal Walkman foi desenvolvido por Victor Sales e tem o intuito de reunir ferramentas úteis para o desenvolvedor.' +
-  '<br/>Quem sabe você não encontra algo últi pra você também?'+
+  '<br/>Quem sabe você não encontra algo útil pra você também?'+
   '<br/>O aplicativo foi desenvolvido com HTML, CSS e JavaScript'
   document.getElementById("padrao2").append(div);
 }
 
 function resNetInfo(){
-  $.getJSON('https://api.db-ip.com/v2/free/self', function(data) {
-    console.log(JSON.stringify(data, null, 2));
-    console.log(data);
-    newdata = JSON.stringify(data)
-    newdata2 = newdata.split("{").join("")
-    newdata2 = newdata2.split("}").join("")
-    newdata2 = newdata2.split('"').join('')
-    newdata2 = newdata2.split(':').join(' : ')
-    newdata2 = newdata2.split(",").join("<br />")
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  div.innerHTML = newdata2
-  document.getElementById("padrao2").append(div);
+    $.getJSON('https://api.db-ip.com/v2/free/self', function(data) {
+      console.log(JSON.stringify(data, null, 2));
+      console.log(data);
+      newdata = JSON.stringify(data)
+      newdata2 = newdata.split("{").join("")
+      newdata2 = newdata2.split("}").join("")
+      newdata2 = newdata2.split('"').join('')
+      newdata2 = newdata2.split(':').join(' : ')
+      newdata2 = newdata2.split(",").join("<br />")
+      var div = document.createElement("div");
+      div.classList.add('padrao');
+          try{
+          div.innerHTML = newdata2
+          }
+      catch{
+        console.log('Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.')
+        div.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.'
+      }
+       document.getElementById("padrao2").append(div);
 });
+
 }
 
 function pegarID(_url){
@@ -268,7 +275,6 @@ function validateForm() {
         resMp4(newurl)
       }
       catch{
-
       }
       _input.value= "";
       return false;
