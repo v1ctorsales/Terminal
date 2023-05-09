@@ -180,8 +180,6 @@ function resMp3(video_id){
     }
   };
 
-  alert(settings.url)
-
   $.ajax(settings).done(function (response) {
     console.log(response);
     console.log(response.link[0])
@@ -279,9 +277,15 @@ function validateForm() {
     }
 
     else if (x.includes("mp3 ")) {
-      divPadrao(x);
-      pegarID(x);
-      resMp3(newurl)
+      try{
+        divPadrao(x);
+        pegarID(x);
+        resMp3(newurl)
+      }
+      catch{
+
+      }
+
       _input.value= "";
       return false;
     }
