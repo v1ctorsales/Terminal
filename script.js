@@ -24,7 +24,7 @@ function resHelp(){
   '<br/>help' +
   '<br/>ip' +
   //'<br/>lang' +
-  //'<br/>mp3' +
+  '<br/>mp3' +
   '<br/>mp4' +
   '<br/>sobre'
 
@@ -130,6 +130,16 @@ function duvidaMp4(){
   '<br/>mp4 + [URL DO YOUTUBE]' +
   '<br/>ex: mp4 https://youtu.be/3ZnHr62W72Q' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube. ' 
+  document.getElementById("padrao2").append(div);
+}
+
+function duvidaMp3(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Lista de comandos disponíveis junto ao mp3:'  +
+  '<br/>mp3 + [URL DO YOUTUBE]' +
+  '<br/>ex: mp3 https://youtu.be/3ZnHr62W72Q' +
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar áudios de vídeos do YouTube. ' 
   document.getElementById("padrao2").append(div);
 }
 
@@ -272,6 +282,12 @@ function validateForm() {
       divPadrao(x);
       pegarID(x);
       resMp3(newurl)
+      _input.value= "";
+      return false;
+    }
+    else if (x.includes("mp3")) {
+      divPadrao(x);
+      duvidaMp3();
       _input.value= "";
       return false;
     }
