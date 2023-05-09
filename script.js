@@ -262,10 +262,14 @@ function validateForm() {
       return false;
     }
     else if (x.includes("mp4 ")) {
-      divPadrao(x);
-      pegarID(x);
-      resMp4(newurl)
-      //resMp4();
+      try{
+        divPadrao(x);
+        pegarID(x);
+        resMp4(newurl)
+      }
+      catch{
+
+      }
       _input.value= "";
       return false;
     }
