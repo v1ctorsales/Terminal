@@ -24,7 +24,7 @@ function resHelp(){
   '<br/>help' +
   '<br/>ip' +
   //'<br/>lang' +
-  '<br/>mp3' +
+  //'<br/>mp3' +
   '<br/>mp4' +
   '<br/>sobre'
 
@@ -145,8 +145,11 @@ const settings = {
 	}
 };
 
-function resMp3(video_id){
-//download
+$.ajax(settings).done(function (response) {
+	console.log(response);
+  console.log(response.formats[2].url)
+  window.open(response.formats[2].url,'_blank');
+});
 }
 
 function validateForm() {
