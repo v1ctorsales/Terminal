@@ -119,8 +119,8 @@ function resNetInfo(){
 
 function pegarID(_url){
   newurl = _url.split('mp4 ').join('');
+  newurl = _url.split('mp3 ').join('');
   newurl = newurl.match(/([a-z0-9_-]{11})/gim)[0]
- resMp4(newurl)
 }
 
 function duvidaMp4(){
@@ -150,12 +150,45 @@ $.ajax(settings).done(function (response) {
   console.log(response.formats[2].url)
   window.open(response.formats[2].url,'_blank');
 });
+
+var div = document.createElement("div");
+div.classList.add('padrao');
+div.innerHTML = 'victorsales\\portifolio\\terminal\\ > Download inicado em nova guia.'
+document.getElementById("padrao2").append(div);
+
 }
+
+function resMp3(video_id){
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://youtube-mp36.p.rapidapi.com/dl?id='+video_id,
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com'
+    }
+  };
+
+  alert(settings.url)
+
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+    console.log(response.link[0])
+    window.open(response.link,'_blank');
+  });
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'victorsales\\portifolio\\terminal\\ > Download inicado em nova guia.'
+  document.getElementById("padrao2").append(div);
+
+  }
 
 function validateForm() {
     let x = document.forms["myForm"]["fname"].value;
     let _input = document.getElementsByName('fname')[0];
-    if(!x.includes("mp4 ")){
+    if(!x.startsWith("mp")){
       x = x.toLowerCase();
     }
     else{}
@@ -223,6 +256,7 @@ function validateForm() {
     else if (x.includes("mp4 ")) {
       divPadrao(x);
       pegarID(x);
+      resMp4(newurl)
       //resMp4();
       _input.value= "";
       return false;
@@ -230,6 +264,14 @@ function validateForm() {
     else if (x.includes("mp4")) {
       divPadrao(x);
       duvidaMp4();
+      _input.value= "";
+      return false;
+    }
+
+    else if (x.includes("mp3 ")) {
+      divPadrao(x);
+      pegarID(x);
+      resMp3(newurl)
       _input.value= "";
       return false;
     }
