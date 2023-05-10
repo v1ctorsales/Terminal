@@ -22,7 +22,8 @@ function resHelp(){
   '<br/>clear' +
   '<br/>color' +
   '<br/>help' +
-  '<br/>ip' +
+  '<br/>ipconfig' +
+  '<br/>iploc'+
   //'<br/>lang' +
   '<br/>mp3' +
   '<br/>mp4' +
@@ -76,6 +77,7 @@ function resColorOrange(){
 }
 
 function resClear(){
+  //obter a cor que o usuario esta usando
   let padrao2 = document.getElementById('padrao2')[0];
   padrao2.innerHTML = "";
 }
@@ -98,6 +100,43 @@ function resSobre(){
   '<br/>Quem sabe você não encontra algo útil pra você também?'+
   '<br/>O aplicativo foi desenvolvido com HTML, CSS e JavaScript'
   document.getElementById("padrao2").append(div);
+}
+
+function resIpLoc(_newip){
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://ip-reputation-geoip-and-detect-vpn.p.rapidapi.com/?ip='+_newip,
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'ip-reputation-geoip-and-detect-vpn.p.rapidapi.com'
+    }
+  };
+  
+  $.ajax(settings).done(function (response) {
+    let ipstring = JSON.stringify(response)
+    var div = document.createElement("div");
+    div.classList.add('padrao');
+        try{
+        div.innerHTML = 'ip : ' + response.ip + '<br>'+
+        'rede : ' + response.cidr + '<br>'+
+        'continente : '+ response.continent + '<br>'+
+        'país : ' + response.country + '<br>'+
+        'região : ' + response.region + '<br>'+
+        'cidade : ' + response.city + '<br>' +
+        'vpn/proxy : ' + response.is_vpn_proxy + '<br>'
+        }
+    catch{
+      console.log('Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.')
+      div.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.'
+    }
+     document.getElementById("padrao2").append(div);
+});
+
+
+
+
 }
 
 function resNetInfo(){
@@ -130,6 +169,11 @@ function pegarID(_url){
   newurl = newurl.match(/([a-z0-9_-]{11})/gim)[0]
 }
 
+function pegarIP(ip){
+newip = ip.split('iploc ').join('');
+resIpLoc(newip);
+}
+
 function duvidaMp4(){
   var div = document.createElement("div");
   div.classList.add('padrao');
@@ -147,6 +191,16 @@ function duvidaMp3(){
   '<br/>mp3 + [URL DO YOUTUBE]' +
   '<br/>ex: mp3 https://youtu.be/3ZnHr62W72Q' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar áudios de vídeos do YouTube. ' 
+  document.getElementById("padrao2").append(div);
+}
+
+function duvidaIploc(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Lista de comandos disponíveis junto ao iploc:'  +
+  '<br/>iploc + [ipv4]' +
+  '<br/>ex: iploc 8.8.8.8' +
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para obter informações sobre um Ipv4 ' 
   document.getElementById("padrao2").append(div);
 }
 
@@ -316,6 +370,20 @@ function validateForm() {
     else if (x == "netinfo" || x=="ipconfig" || x=="ip") {
       divPadrao(x);
       resNetInfo();
+      _input.value= "";
+      return false;
+    }
+
+    else if (x.includes("iploc")) {
+      divPadrao(x);
+      duvidaIploc(x);
+      _input.value= "";
+      return false;
+    }
+
+    else if (x.includes("iploc ")) {
+      divPadrao(x);
+      pegarIP(x);
       _input.value= "";
       return false;
     }
