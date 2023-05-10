@@ -27,7 +27,8 @@ function resHelp(){
   //'<br/>lang' +
   '<br/>mp3' +
   '<br/>mp4' +
-  '<br/>sobre'
+  '<br/>sobre'+
+  '<br/>short'
 
   document.getElementById("padrao2").append(div);
 }
@@ -211,6 +212,54 @@ function duvidaIploc(){
   document.getElementById("padrao2").append(div);
 }
 
+function duvidaShort(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Lista de comandos disponíveis junto ao short:'  +
+  '<br/>short + [URL]' +
+  '<br/>ex: short https://www.google.com' +
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para encurtar URLs. ' 
+  document.getElementById("padrao2").append(div);
+}
+
+function resShort(x){
+
+  input_url = x.split('short ').join('');
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Encurtando URL...'
+
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://url-shortener23.p.rapidapi.com/shorten',
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'url-shortener23.p.rapidapi.com'
+    },
+    processData: false,
+    data: '{\r\n    "url": "'+ input_url +'",\r\n    "alias": ""\r\n}'
+  };
+
+  
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+
+    div.innerHTML = 'Sua URL foi encurtada para: ' + response.short_url + ' e já está disponível no seu CTRL+V'
+    document.getElementById("padrao2").append(div);
+
+    navigator.clipboard.writeText(response.short_url);
+
+  });
+
+
+
+
+}
+
 function resMp4(video_id){
 const settings = {
 	async: true,
@@ -388,9 +437,23 @@ function validateForm() {
       return false;
     }
 
-    else if (x.includes("iploc ")) {
+    else if (x.startsWith("iploc ")) {
       divPadrao(x);
       pegarIP(x);
+      _input.value= "";
+      return false;
+    }
+
+    else if (x ==("short")) {
+      divPadrao(x);
+      duvidaShort();
+      _input.value= "";
+      return false;
+    }
+
+    else if (x.startsWith("short ")) {
+      divPadrao(x);
+      resShort(x);
       _input.value= "";
       return false;
     }
