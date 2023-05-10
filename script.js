@@ -115,13 +115,15 @@ function resIpLoc(_newip){
   };
   
   $.ajax(settings).done(function (response) {
-    let ipstring = JSON.stringify(response)
+    let stringrede = JSON.stringify(response.cidr)
+    console.log(stringrede)
     var div = document.createElement("div");
     div.classList.add('padrao');
+    if(!(stringrede).includes("null")){
         try{
         div.innerHTML = 'ip : ' + response.ip + '<br>'+
         'rede : ' + response.cidr + '<br>'+
-        'continente : '+ response.continent + '<br>'+
+        'continente : '+ response.costringredentinent + '<br>'+
         'país : ' + response.country + '<br>'+
         'região : ' + response.region + '<br>'+
         'cidade : ' + response.city + '<br>' +
@@ -131,6 +133,11 @@ function resIpLoc(_newip){
       console.log('Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.')
       div.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.'
     }
+  }
+  else{
+    div.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> IP inválido.'
+
+  }
      document.getElementById("padrao2").append(div);
 });
 
@@ -374,16 +381,16 @@ function validateForm() {
       return false;
     }
 
-    else if (x.includes("iploc")) {
+    else if (x.includes("iploc ")) {
       divPadrao(x);
-      duvidaIploc(x);
+      pegarIP(x);
       _input.value= "";
       return false;
     }
 
-    else if (x.includes("iploc ")) {
+    else if (x ==("iploc")) {
       divPadrao(x);
-      pegarIP(x);
+      duvidaIploc(x);
       _input.value= "";
       return false;
     }
