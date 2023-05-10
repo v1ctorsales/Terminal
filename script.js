@@ -381,16 +381,16 @@ function validateForm() {
       return false;
     }
 
-    else if (x.includes("iploc ")) {
+    else if (x ==("iploc")) {
       divPadrao(x);
-      pegarIP(x);
+      duvidaIploc(x);
       _input.value= "";
       return false;
     }
 
-    else if (x ==("iploc")) {
+    else if (x.includes("iploc ")) {
       divPadrao(x);
-      duvidaIploc(x);
+      pegarIP(x);
       _input.value= "";
       return false;
     }
