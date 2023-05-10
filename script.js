@@ -123,7 +123,7 @@ function resIpLoc(_newip){
         try{
         div.innerHTML = 'ip : ' + response.ip + '<br>'+
         'rede : ' + response.cidr + '<br>'+
-        'continente : '+ response.costringredentinent + '<br>'+
+        'continente : '+ response.continent + '<br>'+
         'país : ' + response.country + '<br>'+
         'região : ' + response.region + '<br>'+
         'cidade : ' + response.city + '<br>' +
