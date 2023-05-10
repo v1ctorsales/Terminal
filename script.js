@@ -217,7 +217,7 @@ function duvidaShort(){
   div.classList.add('padrao');
   div.innerHTML = 'Lista de comandos disponíveis junto ao short:'  +
   '<br/>short + [URL]' +
-  '<br/>ex: short https://www.google.com' +
+  '<br/>ex: short google.com' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para encurtar URLs. ' 
   document.getElementById("padrao2").append(div);
 }
@@ -229,6 +229,14 @@ function resShort(x){
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'Encurtando URL...'
+  document.getElementById("padrao2").append(div);
+
+  if(input_url.startsWith("http")){
+
+  }
+  else{
+    input_url = ("https://"+input_url)
+  }
 
   const settings = {
     async: true,
@@ -244,10 +252,9 @@ function resShort(x){
     data: '{\r\n    "url": "'+ input_url +'",\r\n    "alias": ""\r\n}'
   };
 
-  
+
   $.ajax(settings).done(function (response) {
     console.log(response);
-
     div.innerHTML = 'Sua URL foi encurtada para: ' + response.short_url + ' e já está disponível no seu CTRL+V'
     document.getElementById("padrao2").append(div);
 
