@@ -104,6 +104,12 @@ function resSobre(){
 }
 
 function resIpLoc(_newip){
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = "Carregando informações sobre o IP..."
+  document.getElementById("padrao2").append(div);
+
   const settings = {
     async: true,
     crossDomain: true,
@@ -118,8 +124,6 @@ function resIpLoc(_newip){
   $.ajax(settings).done(function (response) {
     let stringrede = JSON.stringify(response.cidr)
     console.log(stringrede)
-    var div = document.createElement("div");
-    div.classList.add('padrao');
     if(!(stringrede).includes("null")){
         try{
         div.innerHTML = 'ip : ' + response.ip + '<br>'+
