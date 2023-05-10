@@ -77,8 +77,8 @@ function resColorOrange(){
 }
 
 function resClear(){
-  //obter a cor que o usuario esta usando
-  let padrao2 = document.getElementById('padrao2')[0];
+  var theColorIs = $('.welcome').css("color");
+  padrao2.style.css=(theColorIs);
   padrao2.innerHTML = "";
 }
 
