@@ -272,6 +272,9 @@ function resShort(x){
 }
 
 function resMp4(video_id){
+  var div = document.createElement("div");
+div.classList.add('padrao');
+
 const settings = {
 	async: true,
 	crossDomain: true,
@@ -289,14 +292,16 @@ $.ajax(settings).done(function (response) {
   window.open(response.formats[2].url,'_blank');
 });
 
-var div = document.createElement("div");
-div.classList.add('padrao');
+
 div.innerHTML = 'victorsales\\portifolio\\terminal\\ > Download inicado em nova guia.'
 document.getElementById("padrao2").append(div);
 
 }
 
 function resMp3(video_id){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  
   const settings = {
     async: true,
     crossDomain: true,
@@ -309,14 +314,13 @@ function resMp3(video_id){
   };
 
   $.ajax(settings).done(function (response) {
+    div.innerHTML = 'victorsales\\portifolio\\terminal\\ > Download inicado em nova guia.'
     console.log(response);
     console.log(response.link[0])
     window.open(response.link,'_blank');
   });
 
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  div.innerHTML = 'victorsales\\portifolio\\terminal\\ > Download inicado em nova guia.'
+
   document.getElementById("padrao2").append(div);
 
   }
