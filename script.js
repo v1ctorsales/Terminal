@@ -5,6 +5,10 @@ function divPadrao(x){
   document.getElementById("padrao2").append(div);
 }
 
+function autoScrollDown(){
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
 function comandoInvalido(x){
   var error = " <-- COMANDO NÃO RECONHECIDO PELO SISTEMA!"
   
@@ -31,6 +35,7 @@ function resHelp(){
   '<br/>short'
 
   document.getElementById("padrao2").append(div);
+      window.scrollTo(0, document.body.scrollHeight);
 }
 
 function resColor(){
@@ -171,6 +176,7 @@ function resNetInfo(){
         div.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.'
       }
        document.getElementById("padrao2").append(div);
+       autoScrollDown();
 });
 
 }
@@ -301,7 +307,7 @@ document.getElementById("padrao2").append(div);
 function resMp3(video_id){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  
+
   const settings = {
     async: true,
     crossDomain: true,
@@ -328,6 +334,7 @@ function resMp3(video_id){
 function validateForm() {
     let x = document.forms["myForm"]["fname"].value;
     let _input = document.getElementsByName('fname')[0];
+
     if(!x.startsWith("mp")){
       x = x.toLowerCase();
     }
@@ -336,6 +343,7 @@ function validateForm() {
     if (x == "help" || x == "ajuda") {
       divPadrao(x);
       resHelp();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
@@ -343,53 +351,62 @@ function validateForm() {
       divPadrao(x);
       resColor();
       _input.value= "";
+      autoScrollDown();
       return false;
     }
     else if (x == "color green") {
       divPadrao(x);
       resColorGreen();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
     else if (x == "color red") {
       divPadrao(x);
       resColorRed();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
     else if (x == "color blue") {
       divPadrao(x);
       resColorBlue();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
     else if (x == "color white") {
       divPadrao(x);
       resColorWhite();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
     else if (x == "color pink") {
       divPadrao(x);
       resColorPink();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
     else if (x == "color orange") {
       divPadrao(x);
       resColorOrange();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
     else if (x == "clear" || x== "cls") {
       divPadrao(x);
       resClear();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
     else if (x == "sobre" || x=="about") {
       divPadrao(x);
       resSobre();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
@@ -401,12 +418,14 @@ function validateForm() {
       }
       catch{
       }
+      autoScrollDown();
       _input.value= "";
       return false;
     }
     else if (x.includes("mp4")) {
       divPadrao(x);
       duvidaMp4();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
@@ -420,13 +439,14 @@ function validateForm() {
       catch{
 
       }
-
+      autoScrollDown();
       _input.value= "";
       return false;
     }
     else if (x.includes("mp3")) {
       divPadrao(x);
       duvidaMp3();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
@@ -434,6 +454,7 @@ function validateForm() {
     else if (x == "lang" || x == "idioma" || x == "language" || x == "lingua") {
       divPadrao(x);
       resLang();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
@@ -448,6 +469,7 @@ function validateForm() {
     else if (x ==("iploc")) {
       divPadrao(x);
       duvidaIploc(x);
+      autoScrollDown();
       _input.value= "";
       return false;
     }
@@ -455,6 +477,7 @@ function validateForm() {
     else if (x.startsWith("iploc ")) {
       divPadrao(x);
       pegarIP(x);
+      autoScrollDown();
       _input.value= "";
       return false;
     }
@@ -462,6 +485,7 @@ function validateForm() {
     else if (x ==("short")) {
       divPadrao(x);
       duvidaShort();
+      autoScrollDown();
       _input.value= "";
       return false;
     }
@@ -469,12 +493,15 @@ function validateForm() {
     else if (x.startsWith("short ")) {
       divPadrao(x);
       resShort(x);
+      autoScrollDown();
       _input.value= "";
       return false;
     }
 
     else {
       comandoInvalido(x);
+      autoScrollDown();
       _input.value= "";
     }
+    return
   }
