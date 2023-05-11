@@ -6,7 +6,7 @@ function divPadrao(x){
 }
 
 function autoScrollDown(){
-  window.scrollTo(0, document.body.scrollHeight);
+  window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
 }
 
 function comandoInvalido(x){
