@@ -1,3 +1,37 @@
+var historico = []
+var aumento = 0;
+
+function Armazenar (x){
+  historico.push(x)
+  console.log(historico[historico.length - 1])
+}
+
+function SetaCima() {
+    aumento++;
+    if(historico[historico.length - aumento] != undefined){
+    document.getElementById("inputform").value = historico[historico.length - aumento];
+    }
+    else{
+
+    }
+    if(aumento > historico.length -1){
+      aumento = 0;
+    }
+}
+
+function SetaBaixo(){
+  aumento--;
+  if(historico[historico.length - aumento] != undefined){
+  document.getElementById("inputform").value = historico[historico.length - aumento];
+  }
+  else{
+
+  }
+  if(aumento < 2){
+    aumento = historico.length+1
+  }
+}
+
 function divPadrao(x){
   var div = document.createElement("div");
   div.classList.add('padrao');
@@ -334,6 +368,7 @@ function resMp3(video_id){
 function validateForm() {
     let x = document.forms["myForm"]["fname"].value;
     let _input = document.getElementsByName('fname')[0];
+    Armazenar(x);
 
     if(!x.startsWith("mp")){
       x = x.toLowerCase();
