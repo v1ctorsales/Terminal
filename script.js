@@ -31,8 +31,8 @@ function resHelp(){
   //'<br/>lang' +
   '<br/>mp3' +
   '<br/>mp4' +
-  '<br/>sobre'+
-  '<br/>short'
+  '<br/>short'+
+  '<br/>sobre'
 
   document.getElementById("padrao2").append(div);
       window.scrollTo(0, document.body.scrollHeight);
