@@ -29,6 +29,22 @@ form {
     display: inline;
 }
 
+footer{
+    width: 100%;
+    padding: 0;
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+}
+
+a{
+    text-decoration: none;
+    color: rgb(110, 247, 110);
+}
+a:hover{
+    text-decoration: none;
+}
+
 .padrao{
     margin-block-start: 1em;
     margin-block-end: 1em;;
@@ -40,7 +56,7 @@ form {
 
 .logostl{
     top: 50%;
-    left: 75%;
+    left: 85%;
     position: absolute;
     z-index: -2;
 }

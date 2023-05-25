@@ -136,7 +136,7 @@ function resSobre(){
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'Mais informações sobre este sistema:' +
-  '<br/><br/>O Terminal Walkman foi desenvolvido por Victor Sales e tem o intuito de reunir ferramentas úteis para o desenvolvedor.' +
+  '<br/><br/>Este Terminal foi desenvolvido por Victor Sales e tem o intuito de reunir ferramentas úteis para o desenvolvedor.' +
   '<br/>Quem sabe você não encontra algo útil pra você também?'+
   '<br/>O aplicativo foi desenvolvido com HTML, CSS e JavaScript'
   document.getElementById("padrao2").append(div);
