@@ -186,8 +186,6 @@ function resIpLoc(_newip){
 });
 
 
-
-
 }
 
 function resNetInfo(){
