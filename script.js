@@ -89,31 +89,37 @@ function resColor(){
 function resColorGreen(){
   document.documentElement.style.color="rgb(110, 247, 110)";
   document.getElementsByTagName('input')[0].style.color="rgb(110, 247, 110)";
+  document.getElementsByTagName('a')[0].style.color="rgb(110, 247, 110)";
 }
 
 function resColorRed(){
   document.documentElement.style.color="red";
   document.getElementsByTagName('input')[0].style.color="red";
+  document.getElementsByTagName('a')[0].style.color="red";
 }
 
 function resColorBlue(){
   document.documentElement.style.color="rgb(53, 130, 230)";
   document.getElementsByTagName('input')[0].style.color="rgb(53, 130, 230)";
+  document.getElementsByTagName('a')[0].style.color="rgb(53, 130, 230)";
 }
 
 function resColorWhite(){
   document.documentElement.style.color="white";
   document.getElementsByTagName('input')[0].style.color="white";
+  document.getElementsByTagName('a')[0].style.color="white";
 }
 
 function resColorPink(){
   document.documentElement.style.color="#fc03ad";
   document.getElementsByTagName('input')[0].style.color="#fc03ad";
+  document.getElementsByTagName('a')[0].style.color="#fc03ad";
 }
 
 function resColorOrange(){
   document.documentElement.style.color="orange";
   document.getElementsByTagName('input')[0].style.color="orange";
+  document.getElementsByTagName('a')[0].style.color="orange";
 }
 
 function resClear(){
