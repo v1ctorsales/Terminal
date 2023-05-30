@@ -90,36 +90,43 @@ function resColorGreen(){
   document.documentElement.style.color="rgb(110, 247, 110)";
   document.getElementsByTagName('input')[0].style.color="rgb(110, 247, 110)";
   document.getElementsByTagName('a')[0].style.color="rgb(110, 247, 110)";
+  $('.logostl').attr("src","imgs/greenman.gif");
 }
 
 function resColorRed(){
   document.documentElement.style.color="red";
   document.getElementsByTagName('input')[0].style.color="red";
   document.getElementsByTagName('a')[0].style.color="red";
+  $('.logostl').attr("src","imgs/redman.gif");
 }
 
 function resColorBlue(){
   document.documentElement.style.color="rgb(53, 130, 230)";
   document.getElementsByTagName('input')[0].style.color="rgb(53, 130, 230)";
   document.getElementsByTagName('a')[0].style.color="rgb(53, 130, 230)";
+  $('.logostl').attr("src","imgs/blueman.gif");
 }
 
 function resColorWhite(){
   document.documentElement.style.color="white";
   document.getElementsByTagName('input')[0].style.color="white";
   document.getElementsByTagName('a')[0].style.color="white";
+  $('.logostl').attr("src","imgs/whiteman.gif");
 }
 
 function resColorPink(){
   document.documentElement.style.color="#fc03ad";
   document.getElementsByTagName('input')[0].style.color="#fc03ad";
   document.getElementsByTagName('a')[0].style.color="#fc03ad";
+  $('.logostl').attr("src","");
+  //$('.logostl').attr("src","https://im2.ezgif.com/tmp/ezgif-2-52fd5176f7.gif");
 }
 
 function resColorOrange(){
   document.documentElement.style.color="orange";
   document.getElementsByTagName('input')[0].style.color="orange";
   document.getElementsByTagName('a')[0].style.color="orange";
+  $('.logostl').attr("src","");
 }
 
 function resClear(){
