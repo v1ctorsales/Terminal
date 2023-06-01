@@ -66,7 +66,8 @@ function resHelp(){
   '<br/>mp3' +
   '<br/>mp4' +
   '<br/>short'+
-  '<br/>sobre'
+  '<br/>sobre' +
+  '<br/>wpp'
 
   document.getElementById("padrao2").append(div);
       window.scrollTo(0, document.body.scrollHeight);
@@ -275,6 +276,27 @@ function duvidaShort(){
   '<br/>ex: short google.com' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para encurtar URLs. ' 
   document.getElementById("padrao2").append(div);
+}
+
+function duvidaWpp(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Lista de comandos disponíveis junto ao wpp:'  +
+  '<br/>wpp + [Número de Telefone]' +
+  '<br/>ex: wpp 553171239966' +
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para enviar mensagens via whatsapp. ' 
+  document.getElementById("padrao2").append(div);
+}
+
+function resmandarMsg(x){
+  input_url = x.split('wpp ').join('');
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Solicitação de mensagem aberta em nova aba.'
+  document.getElementById("padrao2").append(div);
+
+    var win = window.open("https://wa.me/"+input_url)
 }
 
 function resShort(x){
@@ -539,6 +561,22 @@ function validateForm() {
     else if (x.startsWith("short ")) {
       divPadrao(x);
       resShort(x);
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
+
+    else if (x ==("msg") || x==("wpp")) {
+      divPadrao(x);
+      duvidaWpp();
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
+
+    else if (x.startsWith("wpp ")) {
+      divPadrao(x);
+      resmandarMsg(x);
       autoScrollDown();
       _input.value= "";
       return false;
