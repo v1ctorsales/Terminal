@@ -328,26 +328,20 @@ function resQR(x){ //dando erro
   const settings = {
     async: true,
     crossDomain: true,
-    url: 'https://qrcode3.p.rapidapi.com/qrcode/text',
-    method: 'POST',
+    url: 'https://qr-code78.p.rapidapi.com/generate_qr?url='+ input_url,
+    method: 'GET',
     headers: {
-      "Accept": "image/svg+xml",
-      'content-type': 'application/json',
       'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
-      'X-RapidAPI-Host': 'qrcode3.p.rapidapi.com'
-    },
-    processData: false,
-    data: '{\r\n    "data": "https://linqr.app",\r\n    "image": {\r\n        "uri": "icon://appstore",\r\n        "modules": true\r\n    },\r\n    "style": {\r\n        "module": {\r\n            "color": "black",\r\n            "shape": "default"\r\n        },\r\n        "inner_eye": {\r\n            "shape": "default"\r\n        },\r\n        "outer_eye": {\r\n            "shape": "default"\r\n        },\r\n        "background": {}\r\n    },\r\n    "size": {\r\n        "width": 200,\r\n        "quiet_zone": 4,\r\n        "error_correction": "M"\r\n    },\r\n    "output": {\r\n        "filename": "qrcode",\r\n        "format": "png"\r\n    }\r\n}'
+      'X-RapidAPI-Host': 'qr-code78.p.rapidapi.com'
+    }
   };
   
   $.ajax(settings).done(function (response) {
     console.log(response);
+    //div.textContent =  <img src="imagem.jpg" alt="Minha Figura"></img>response.qr_url
+    div.innerHTML =  '<img src="'+response.qr_url+'" alt="Minha Figura"></img>'
+  });
 
-    var imageUrl = settings.data
-    console.log(imageUrl)
-    div.innerHTML = '<img src="'+imageUrl+'"/>';
-
-});
   };
 
 function resShort(x){
