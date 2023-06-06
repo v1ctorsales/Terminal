@@ -65,6 +65,7 @@ function resHelp(){
   //'<br/>lang' +
   '<br/>mp3' +
   '<br/>mp4' +
+  '<br/>qr'+
   '<br/>short'+
   '<br/>sobre' +
   '<br/>wpp'
@@ -258,6 +259,16 @@ function duvidaMp3(){
   document.getElementById("padrao2").append(div);
 }
 
+function duvidaQR(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Lista de comandos disponíveis junto ao QR:'  +
+  '<br/>qr + [URL]' +
+  '<br/>ex: qr google.com' +
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para criar um QR Code com destino à uma URL. ' 
+  document.getElementById("padrao2").append(div);
+}
+
 function duvidaIploc(){
   var div = document.createElement("div");
   div.classList.add('padrao');
@@ -298,6 +309,46 @@ function resmandarMsg(x){
 
     var win = window.open("https://wa.me/"+input_url)
 }
+function resQR(x){ //dando erro
+
+  input_url = x.split('qr ').join('');
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Criando QR Code...'
+  document.getElementById("padrao2").append(div);
+
+  if(input_url.startsWith("http")){
+
+  }
+  else{
+    input_url = ("https://"+input_url)
+  }
+
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://qrcode3.p.rapidapi.com/qrcode/text',
+    method: 'POST',
+    headers: {
+      "Accept": "image/svg+xml",
+      'content-type': 'application/json',
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'qrcode3.p.rapidapi.com'
+    },
+    processData: false,
+    data: '{\r\n    "data": "https://linqr.app",\r\n    "image": {\r\n        "uri": "icon://appstore",\r\n        "modules": true\r\n    },\r\n    "style": {\r\n        "module": {\r\n            "color": "black",\r\n            "shape": "default"\r\n        },\r\n        "inner_eye": {\r\n            "shape": "default"\r\n        },\r\n        "outer_eye": {\r\n            "shape": "default"\r\n        },\r\n        "background": {}\r\n    },\r\n    "size": {\r\n        "width": 200,\r\n        "quiet_zone": 4,\r\n        "error_correction": "M"\r\n    },\r\n    "output": {\r\n        "filename": "qrcode",\r\n        "format": "png"\r\n    }\r\n}'
+  };
+  
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+
+    var imageUrl = settings.data
+    console.log(imageUrl)
+    div.innerHTML = '<img src="'+imageUrl+'"/>';
+
+});
+  };
 
 function resShort(x){
 
@@ -545,6 +596,22 @@ function validateForm() {
     else if (x.startsWith("iploc ")) {
       divPadrao(x);
       pegarIP(x);
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
+
+    else if (x == "qr") {
+      divPadrao(x);
+      duvidaQR();
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
+
+    else if (x.startsWith("qr ")) {
+      divPadrao(x);
+      resQR(x);
       autoScrollDown();
       _input.value= "";
       return false;
