@@ -318,11 +318,17 @@ function resQR(x){ //dando erro
   div.innerHTML = 'Criando QR Code...'
   document.getElementById("padrao2").append(div);
 
-  if(input_url.startsWith("http")){
+  if(input_url != ''){
 
+    if(input_url.startsWith("http")){
+
+    }
+    else{
+      input_url = ("https://"+input_url)
+    }
   }
   else{
-    input_url = ("https://"+input_url)
+    div.innerHTML = 'URL inválida'
   }
 
   const settings = {
