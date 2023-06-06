@@ -338,8 +338,8 @@ function resQR(x){ //dando erro
   
   $.ajax(settings).done(function (response) {
     console.log(response);
-    //div.textContent =  <img src="imagem.jpg" alt="Minha Figura"></img>response.qr_url
-    div.innerHTML =  '<img src="'+response.qr_url+'" alt="Minha Figura"></img>'
+    div.innerHTML =  'QR Code de '+input_url+' gerado:<br><br>'+ 
+    '<img src="'+response.qr_url+'" alt="Minha Figura"></img>'
   });
 
   };
