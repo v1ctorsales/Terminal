@@ -35,7 +35,7 @@ function SetaBaixo(){
 function divPadrao(x){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = "victorsales\\portifolio\\terminal\\ > " + x;
+  div.innerHTML = "myterminal > " + x;
   document.getElementById("padrao2").append(div);
 }
 
@@ -48,7 +48,7 @@ function comandoInvalido(x){
   
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = "victorsales\\portifolio\\terminal\\ > " + x + error;
+  div.innerHTML = "myterminal\\ > " + x + error;
   document.getElementById("padrao2").append(div);
   //alert("Comando inválido");
 }
@@ -56,7 +56,7 @@ function comandoInvalido(x){
 function resHelp(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'victorsales\\portifolio\\terminal\\ > Lista de todos os comandos disponíveis :' +
+  div.innerHTML = 'myterminal\\ > Lista de todos os comandos disponíveis :' +
   '<br/>clear' +
   '<br/>color' +
   '<br/>help' +
@@ -417,7 +417,7 @@ $.ajax(settings).done(function (response) {
 });
 
 
-div.innerHTML = 'victorsales\\portifolio\\terminal\\ > Download inicado em nova guia.'
+div.innerHTML = 'myterminal > Download inicado em nova guia.'
 document.getElementById("padrao2").append(div);
 
 }
@@ -438,7 +438,7 @@ function resMp3(video_id){
   };
 
   $.ajax(settings).done(function (response) {
-    div.innerHTML = 'victorsales\\portifolio\\terminal\\ > Download inicado em nova guia.'
+    div.innerHTML = 'myterminal > Download inicado em nova guia.'
     console.log(response);
     console.log(response.link[0])
     window.open(response.link,'_blank');
