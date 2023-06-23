@@ -343,9 +343,13 @@ function resQR(x){ //dando erro
   };
   
   $.ajax(settings).done(function (response) {
-    console.log(response);
+    try{
     div.innerHTML =  'QR Code de '+input_url+' gerado:<br><br>'+ 
     '<img src="'+response.qr_url+'" alt="Minha Figura"></img>'
+      }
+      catch{
+        div.innerHTML =  'Erro ao acessar o servidor. O QR Code não foi gerado.'
+      }
   });
 
   };
