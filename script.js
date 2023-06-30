@@ -65,7 +65,7 @@ function resHelp(){
   //'<br/>lang' +
   '<br/>mp3' +
   '<br/>mp4' +
-  '<br/>qr'+
+  //'<br/>qr'+
   '<br/>short'+
   '<br/>sobre' +
   '<br/>wpp'
