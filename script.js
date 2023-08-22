@@ -334,18 +334,27 @@ function resQR(x){ //dando erro
   const settings = {
     async: true,
     crossDomain: true,
-    url: 'https://qr-code78.p.rapidapi.com/generate_qr?url='+ input_url,
-    method: 'GET',
+    url: 'https://neutrinoapi-qr-code.p.rapidapi.com/qr-code',
+    method: 'POST',
     headers: {
+      'content-type': 'application/x-www-form-urlencoded',
       'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
-      'X-RapidAPI-Host': 'qr-code78.p.rapidapi.com'
+      'X-RapidAPI-Host': 'neutrinoapi-qr-code.p.rapidapi.com'
+    },
+    data: {
+      content: input_url,
+      width: '128',
+      height: '128',
+      'fg-color': '#000000',
+      'bg-color': '#ffffff'
     }
   };
   
   $.ajax(settings).done(function (response) {
     try{
+      console.log(response)
     div.innerHTML =  'QR Code de '+input_url+' gerado:<br><br>'+ 
-    '<img src="'+response.qr_url+'" alt="Minha Figura"></img>'
+    'data:image/png;base64, '+response
       }
       catch{
         div.innerHTML =  'Erro ao acessar o servidor. O QR Code não foi gerado.'
