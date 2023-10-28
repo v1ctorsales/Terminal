@@ -59,6 +59,7 @@ function resHelp(){
   div.innerHTML = 'myterminal\\ > Lista de todos os comandos disponíveis :' +
   '<br/>clear' +
   '<br/>color' +
+  '<br/>download' +
   '<br/>help' +
   '<br/>ipconfig' +
   '<br/>iploc'+
