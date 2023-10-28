@@ -299,6 +299,18 @@ function duvidaWpp(){
   document.getElementById("padrao2").append(div);
 }
 
+function duivdaDownload(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Lista de comandos disponíveis junto ao Download:'  +
+  '<br/>download + [Arquivo]' +
+  '<br/>ex: download cachepass' +
+  '<br/>Arquivos disponíveis para download:' +
+  '<br/><ul><li>CachePass</li></ul>' +
+  '<i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar arquivos.' 
+  document.getElementById("padrao2").append(div);
+}
+
 function resmandarMsg(x){
   input_url = x.split('wpp ').join('');
 
@@ -309,6 +321,18 @@ function resmandarMsg(x){
 
     var win = window.open("https://wa.me/"+input_url)
 }
+
+function resDownloadCachePass(x){
+  input_url = x.split('wpp ').join('');
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Download de CachePass iniciado em nova aba.'
+  document.getElementById("padrao2").append(div);
+
+    var win = window.open("https://github.com/v1ctorsales/Senhas-Wifi/raw/main/Cache.Pass.exe")
+}
+
 function resQR(x){ //dando erro
 
   input_url = x.split('qr ').join('');
@@ -438,6 +462,34 @@ function resMp3(video_id){
   document.getElementById("padrao2").append(div);
 
   }
+
+  function resMp3(video_id){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://youtube-mp36.p.rapidapi.com/dl?id='+video_id,
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com'
+    }
+  };
+
+  $.ajax(settings).done(function (response) {
+    div.innerHTML = 'myterminal > Download inicado em nova guia.'
+    console.log(response);
+    console.log(response.link[0])
+    window.open(response.link,'_blank');
+  });
+
+
+  document.getElementById("padrao2").append(div);
+
+  }
+
 
 function validateForm() {
     let x = document.forms["myForm"]["fname"].value;
@@ -639,6 +691,21 @@ function validateForm() {
       return false;
     }
 
+    else if (x ==("download") || (x == "dd")) {
+      divPadrao(x);
+      duivdaDownload(x);
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
+
+    else if (x ==("download cachepass") || (x == "dd cachepass")) {
+      divPadrao(x);
+      resDownloadCachePass(x);
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
     else {
       comandoInvalido(x);
       autoScrollDown();
