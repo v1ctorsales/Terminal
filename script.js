@@ -57,9 +57,10 @@ function resHelp(){
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'myterminal\\ > Lista de todos os comandos disponíveis :' +
+  '<br/>arquivo' +
   '<br/>clear' +
   '<br/>color' +
-  '<br/>download' +
+  //'<br/>font' +
   '<br/>help' +
   '<br/>ipconfig' +
   '<br/>iploc'+
@@ -300,13 +301,13 @@ function duvidaWpp(){
   document.getElementById("padrao2").append(div);
 }
 
-function duivdaDownload(){
+function duivdaArquivo(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao Download:'  +
-  '<br/>download + [Arquivo]' +
-  '<br/>ex: download cachepass' +
-  '<br/>Arquivos disponíveis para download:' +
+  div.innerHTML = 'Lista de comandos disponíveis junto ao Arquivo:'  +
+  '<br/>arquivo + [Nome do Arquivo]' +
+  '<br/>ex: arquivo cachepass' +
+  '<br/>Arquivos disponíveis:' +
   '<br/><ul><li>CachePass</li></ul>' +
   '<i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar arquivos.' 
   document.getElementById("padrao2").append(div);
@@ -323,7 +324,7 @@ function resmandarMsg(x){
     var win = window.open("https://wa.me/"+input_url)
 }
 
-function resDownloadCachePass(x){
+function resArquivoCachePass(x){
   input_url = x.split('wpp ').join('');
 
   var div = document.createElement("div");
@@ -692,17 +693,17 @@ function validateForm() {
       return false;
     }
 
-    else if (x ==("download") || (x == "dd")) {
+    else if (x ==("arquivo") || (x == "arq")) {
       divPadrao(x);
-      duivdaDownload(x);
+      duivdaArquivo(x);
       autoScrollDown();
       _input.value= "";
       return false;
     }
 
-    else if (x ==("download cachepass") || (x == "dd cachepass")) {
+    else if (x ==("arquivo cachepass") || (x == "arq cachepass")) {
       divPadrao(x);
-      resDownloadCachePass(x);
+      resArquivoCachePass(x);
       autoScrollDown();
       _input.value= "";
       return false;
