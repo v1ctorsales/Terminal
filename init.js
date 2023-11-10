@@ -13,7 +13,7 @@ window.onload = function() {
     document.getElementById("inputform").focus();
   };
 
-  document.getElementById("body").addEventListener('click', function() {
+  document.getElementById("body").addEventListener('mouseout', function() {
     document.getElementById("inputform").focus();
   });
   
