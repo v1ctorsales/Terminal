@@ -66,6 +66,22 @@ a:hover{
     display: flex;
 }
 
+.erroSimples{
+    display: inline;
+
+    color: rgb(97, 1, 1);
+}
+
+.information{
+    color: rgb(255, 0, 157);
+    display: inline;
+}
+
+.myTerminal{
+    display: inline;
+    color: rgb(50, 128, 57);
+}
+
 @media (max-width: 900px) {
     .logostl{
         display: none;

@@ -33,10 +33,22 @@ function SetaBaixo(){
 }
 
 function divPadrao(x){
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  div.innerHTML = "myterminal > " + x;
-  document.getElementById("padrao2").append(div);
+
+  var listaDeComandos = ["mp3", "mp4 ", "short", "arquivo", "clear","cls","help","ajuda","color","qr","sobre"];
+  listaDeComandos.forEach(comando => {
+      if (x.includes(comando) && x.startsWith(comando)) {
+      var y = removerParteDaString(x, comando);
+      console.log(y); 
+  
+      var div = document.createElement("div");
+      div.classList.add('padrao');
+      div.innerHTML = "<div class='myTerminal'>myterminal ></div> " + y;
+      document.getElementById("padrao2").append(div);
+    }
+
+  });
+
+
 }
 
 function autoScrollDown(){
@@ -44,11 +56,11 @@ function autoScrollDown(){
 }
 
 function comandoInvalido(x){
-  var error = " <-- COMANDO NÃO RECONHECIDO PELO SISTEMA!"
+  var error = " <div class='erroSimples'> <-- COMANDO NÃO RECONHECIDO PELO SISTEMA! </div>"
   
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = "myterminal\\ > " + x + error;
+  div.innerHTML = "<div class='myTerminal'>myterminal ></div> " + x + error;
   document.getElementById("padrao2").append(div);
   //alert("Comando inválido");
 }
@@ -56,13 +68,13 @@ function comandoInvalido(x){
 function resHelp(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'myterminal\\ > Lista de todos os comandos disponíveis :' +
+  div.innerHTML = 'myterminal\\ > Lista de todos os comandos disponíveis :' + '<div class="information">' +
   '<br/>arquivo' +
   '<br/>clear' +
   '<br/>color' +
   //'<br/>font' +
   '<br/>help' +
-  '<br/>ipconfig' +
+  //'<br/>ipconfig' +
   '<br/>iploc'+
   //'<br/>lang' +
   '<br/>mp3' +
@@ -70,7 +82,8 @@ function resHelp(){
   '<br/>qr'+
   '<br/>short'+
   '<br/>sobre' +
-  '<br/>wpp'
+  "</div>"
+  //'<br/>wpp' 
 
   document.getElementById("padrao2").append(div);
       window.scrollTo(0, document.body.scrollHeight);
@@ -119,9 +132,9 @@ function resColorWhite(){
 }
 
 function resColorPink(){
-  document.documentElement.style.color="#fc03ad";
-  document.getElementsByTagName('input')[0].style.color="#fc03ad";
-  document.getElementsByTagName('a')[0].style.color="#fc03ad";
+  document.documentElement.style.color="#cb7dff";
+  document.getElementsByTagName('input')[0].style.color="#cb7dff";
+  document.getElementsByTagName('a')[0].style.color="#cb7dff";
   $('.logostl').attr("src","");
   //$('.logostl').attr("src","https://im2.ezgif.com/tmp/ezgif-2-52fd5176f7.gif");
 }
@@ -247,7 +260,7 @@ function duvidaMp4(){
   div.innerHTML = 'Lista de comandos disponíveis junto ao mp4:'  +
   '<br/>mp4 + [URL DO YOUTUBE]' +
   '<br/>ex: mp4 https://youtu.be/3ZnHr62W72Q' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube. ' 
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube.' 
   document.getElementById("padrao2").append(div);
 }
 
@@ -440,7 +453,7 @@ document.getElementById("padrao2").append(div);
 
 function resMp3(video_id){
   var div = document.createElement("div");
-  div.classList.add('padrao');
+  //div.classList.add('padrao');
 
   const settings = {
     async: true,
@@ -492,11 +505,30 @@ function resMp3(video_id){
 
   }
 
+  function removerParteDaString(texto, parteASerRemovida) {
+    // Verificar se a parteASerRemovida está presente na string
+    var indice = texto.indexOf(parteASerRemovida);
+  
+    // Se a parteASerRemovida for encontrada, remover e envolver com a classe "information"
+    if (indice !== -1) {
+      var parteRemovida = texto.slice(indice, indice + parteASerRemovida.length);
+      var resultado = texto.replace(parteRemovida, "<div class='information'>" + parteRemovida + "</div>");
+      return resultado;
+    } else {
+      // Se a parteASerRemovida não for encontrada, retornar a string original
+      return texto;
+    }
+  }
+  
+
 
 function validateForm() {
+
+
     let x = document.forms["myForm"]["fname"].value;
     let _input = document.getElementsByName('fname')[0];
     Armazenar(x);
+
 
     if(!x.startsWith("mp")){
       x = x.toLowerCase();
@@ -575,7 +607,7 @@ function validateForm() {
     }
     else if (x.includes("mp4 ")) {
       try{
-        divPadrao(x);
+        //divPadrao(x);
         pegarID(x);
         resMp4(newurl)
       }
