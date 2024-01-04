@@ -427,7 +427,7 @@ function resShort(x){
 function resMp4(video_id){
   var div = document.createElement("div");
 div.classList.add('padrao');
-
+console.log(video_id);
 const settings = {
 	async: true,
 	crossDomain: true,
@@ -438,12 +438,17 @@ const settings = {
 		'X-RapidAPI-Host': 'ytstream-download-youtube-videos.p.rapidapi.com'
 	}
 };
-
+  
+try{
 $.ajax(settings).done(function (response) {
-	console.log(response);
-  console.log(response.formats[2].url)
-  window.open(response.formats[2].url,'_blank');
+	console.log(response.data);
+  console.log(response.formats[1].url)
+  window.open(response.formats[1].url,'_blank');
 });
+}
+catch(err){
+  console.log(err);
+}
 
 
 div.innerHTML = 'myterminal > Download inicado em nova guia.'
