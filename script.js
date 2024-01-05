@@ -456,33 +456,6 @@ document.getElementById("padrao2").append(div);
 
 }
 
-function resMp3(video_id){
-  var div = document.createElement("div");
-  //div.classList.add('padrao');
-
-  const settings = {
-    async: true,
-    crossDomain: true,
-    url: 'https://youtube-mp36.p.rapidapi.com/dl?id='+video_id,
-    method: 'GET',
-    headers: {
-      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
-      'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com'
-    }
-  };
-
-  $.ajax(settings).done(function (response) {
-    div.innerHTML = 'myterminal > Download inicado em nova guia.'
-    console.log(response);
-    console.log(response.link[0])
-    window.open(response.link,'_blank');
-  });
-
-
-  document.getElementById("padrao2").append(div);
-
-  }
-
   function resMp3(video_id){
   var div = document.createElement("div");
   div.classList.add('padrao');
@@ -612,7 +585,7 @@ function validateForm() {
     }
     else if (x.includes("mp4 ")) {
       try{
-        //divPadrao(x);
+        divPadrao(x);
         pegarID(x);
         resMp4(newurl)
       }
