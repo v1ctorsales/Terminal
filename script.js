@@ -1,5 +1,7 @@
 var historico = []
 var aumento = 0;
+var darkcolor = "rgb(50, 128, 57)"
+
 
 function Armazenar (x){
   historico.push(x)
@@ -30,6 +32,17 @@ function SetaBaixo(){
   if(aumento < 2){
     aumento = historico.length+1
   }
+}
+
+function colorirDivPadrao(){
+  var elementoWelcome = document.querySelector('.welcome');
+  elementoWelcome.style.removeProperty('color');
+  elementoWelcome.style.color = darkcolor;
+  var elementosTerminal = document.querySelectorAll('.myTerminal');
+  elementosTerminal.forEach(function(elemento) {
+      elemento.style.removeProperty('color');
+      elemento.style.color = darkcolor;
+  });
 }
 
 function divPadrao(x){
@@ -108,6 +121,8 @@ function resColorGreen(){
   document.getElementsByTagName('input')[0].style.color="rgb(110, 247, 110)";
   document.getElementsByTagName('a')[0].style.color="rgb(110, 247, 110)";
   $('.logostl').attr("src","imgs/greenman.gif");
+
+  darkcolor = "rgb(50, 128, 57)";
 }
 
 function resColorRed(){
@@ -115,6 +130,8 @@ function resColorRed(){
   document.getElementsByTagName('input')[0].style.color="red";
   document.getElementsByTagName('a')[0].style.color="red";
   $('.logostl').attr("src","imgs/redman.gif");
+
+  darkcolor = 'rgb(138 5 5)';
 }
 
 function resColorBlue(){
@@ -122,6 +139,8 @@ function resColorBlue(){
   document.getElementsByTagName('input')[0].style.color="rgb(53, 130, 230)";
   document.getElementsByTagName('a')[0].style.color="rgb(53, 130, 230)";
   $('.logostl').attr("src","imgs/blueman.gif");
+
+  darkcolor = 'rgb(66 68 151)';
 }
 
 function resColorWhite(){
@@ -129,6 +148,9 @@ function resColorWhite(){
   document.getElementsByTagName('input')[0].style.color="white";
   document.getElementsByTagName('a')[0].style.color="white";
   $('.logostl').attr("src","imgs/whiteman.gif");
+
+  darkcolor = 'rgb(84 84 84)'
+
 }
 
 function resColorPink(){
@@ -137,6 +159,8 @@ function resColorPink(){
   document.getElementsByTagName('a')[0].style.color="#cb7dff";
   $('.logostl').attr("src","");
   //$('.logostl').attr("src","https://im2.ezgif.com/tmp/ezgif-2-52fd5176f7.gif");
+  
+  darkcolor = 'rgb(94 61 102)'
 }
 
 function resColorOrange(){
@@ -144,6 +168,8 @@ function resColorOrange(){
   document.getElementsByTagName('input')[0].style.color="orange";
   document.getElementsByTagName('a')[0].style.color="orange";
   $('.logostl').attr("src","");
+
+  darkcolor = 'rgb(138 79 11)' 
 }
 
 function resClear(){
@@ -502,11 +528,11 @@ document.getElementById("padrao2").append(div);
 
 function validateForm() {
 
-
+  var elementos = document.querySelectorAll('.myTerminal');
     let x = document.forms["myForm"]["fname"].value;
     let _input = document.getElementsByName('fname')[0];
     Armazenar(x);
-
+    colorirDivPadrao();
 
     if(!x.startsWith("mp")){
       x = x.toLowerCase();
@@ -531,6 +557,7 @@ function validateForm() {
       divPadrao(x);
       resColorGreen();
       autoScrollDown();
+      colorirDivPadrao()
       _input.value= "";
       return false;
     }
@@ -538,6 +565,7 @@ function validateForm() {
       divPadrao(x);
       resColorRed();
       autoScrollDown();
+      colorirDivPadrao();
       _input.value= "";
       return false;
     }
@@ -545,6 +573,7 @@ function validateForm() {
       divPadrao(x);
       resColorBlue();
       autoScrollDown();
+      colorirDivPadrao()
       _input.value= "";
       return false;
     }
@@ -552,6 +581,7 @@ function validateForm() {
       divPadrao(x);
       resColorWhite();
       autoScrollDown();
+      colorirDivPadrao()
       _input.value= "";
       return false;
     }
@@ -559,6 +589,7 @@ function validateForm() {
       divPadrao(x);
       resColorPink();
       autoScrollDown();
+      colorirDivPadrao()
       _input.value= "";
       return false;
     }
@@ -566,6 +597,7 @@ function validateForm() {
       divPadrao(x);
       resColorOrange();
       autoScrollDown();
+      colorirDivPadrao()
       _input.value= "";
       return false;
     }

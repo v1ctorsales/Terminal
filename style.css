@@ -1,3 +1,5 @@
+
+
 html{
     color: rgb(110, 247, 110);
     font-family: 'VT323', monospace;
@@ -48,6 +50,7 @@ a:hover{
 
 .welcome{
     margin-bottom: 1rem;
+    color: rgb(50, 128, 57);
 }
 
 .padrao{
@@ -84,7 +87,7 @@ a:hover{
 
 .myTerminal{
     display: inline;
-    color: rgb(50, 128, 57);
+
 }
 
 @media (max-width: 900px) {
