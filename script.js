@@ -82,7 +82,7 @@ function resHelp(){
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'myterminal > Lista de todos os comandos disponíveis :' + '<div class="information">' +
-  '<br/>arquivo' +
+  //'<br/>arquivo' +
   '<br/>clear' +
   '<br/>color' +
   //'<br/>font' +
