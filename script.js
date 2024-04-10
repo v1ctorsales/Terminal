@@ -275,6 +275,12 @@ function pegarID(_url){
   newurl = newurl.match(/([a-z0-9_-]{11})/gim)[0]
 }
 
+function pegarURL(_url){
+  newurlInstagram = _url.split('mp4 ').join('');
+  newurlInstagram = _url.split('mp3 ').join('');
+  return newurlInstagram;
+}
+
 function pegarIP(ip){
 newip = ip.split('iploc ').join('');
 resIpLoc(newip);
@@ -284,9 +290,9 @@ function duvidaMp4(){
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'Lista de comandos disponíveis junto ao mp4:'  +
-  '<br/>mp4 + [URL DO YOUTUBE]' +
+  '<br/>mp4 + [URL]' +
   '<br/>ex: mp4 https://youtu.be/3ZnHr62W72Q' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube.' 
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube ou Instagram.' 
   document.getElementById("padrao2").append(div);
 }
 
@@ -450,10 +456,11 @@ function resShort(x){
 
 }
 
-function resMp4(video_id){
+function resMp4Youtube(video_id){
   var div = document.createElement("div");
 div.classList.add('padrao');
 console.log(video_id);
+
 const settings = {
 	async: true,
 	crossDomain: true,
@@ -480,6 +487,41 @@ catch(err){
 div.innerHTML = 'myterminal > Download inicado em nova guia.'
 document.getElementById("padrao2").append(div);
 
+}
+
+function resMp4Instagram(ulrInstagram, type){
+
+  if(ulrInstagram.includes("mp4 ")){
+    ulrInstagram = ulrInstagram.split('mp4 ').join('');
+  }
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+
+  div.innerHTML = 'myterminal > Iniciando o download...'
+
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://instagram-media-downloader.p.rapidapi.com/rapid/'+ type +'.php?url=' + ulrInstagram,
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'instagram-media-downloader.p.rapidapi.com'
+    }
+  };
+  try{
+  $.ajax(settings).done(function (response) {
+    console.log(response.video);
+    window.open(response.video,'_blank');
+    div.innerHTML = 'myterminal > Download inicado em nova guia.';
+  });
+}
+catch{
+  console.log(err);
+}
+
+document.getElementById("padrao2").append(div);
 }
 
   function resMp3(video_id){
@@ -618,8 +660,30 @@ function validateForm() {
     else if (x.includes("mp4 ")) {
       try{
         divPadrao(x);
-        pegarID(x);
-        resMp4(newurl)
+        if(x.includes("youtube.") || x.includes("yout.") || x.includes("youtu."))
+        {
+          pegarID(x); 
+          resMp4Youtube(newurl)
+        }
+        else if (x.includes("instagram") && x.includes("/stories/"))
+        {
+          pegarURL(x)
+          type = 'stories'
+          resMp4Instagram(newurlInstagram, type)
+        }
+        else if (x.includes("instagram") && x.includes("m/p/"))
+        {
+          pegarURL(x)
+          type = 'post'
+          resMp4Instagram(newurlInstagram, type)
+        }
+        else if (x.includes("instagram") && x.includes("/reel/"))
+        {
+          pegarURL(x)
+          type = 'post'
+          resMp4Instagram(newurlInstagram, type)
+        }
+
       }
       catch{
       }
