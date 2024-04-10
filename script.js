@@ -292,7 +292,7 @@ function duvidaMp4(){
   div.innerHTML = 'Lista de comandos disponíveis junto ao mp4:'  +
   '<br/>mp4 + [URL]' +
   '<br/>ex: mp4 https://youtu.be/3ZnHr62W72Q' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube, Instagram e Twitter.' 
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube, Instagram, Facebook, Twitter, Tiktok e Reddit.' 
   document.getElementById("padrao2").append(div);
 }
 
@@ -559,6 +559,51 @@ catch{
 document.getElementById("padrao2").append(div);
 }
 
+function resMp4Outros(ulrInstagram){
+
+  if(ulrInstagram.includes("mp4 ")){
+    ulrInstagram = ulrInstagram.split('mp4 ').join('');
+  }
+
+  if(ulrInstagram.includes("web.")){
+    ulrInstagram = ulrInstagram.split('web.').join('');
+  }
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+
+  div.innerHTML = 'myterminal > Iniciando o download...'
+
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://all-media-downloader.p.rapidapi.com/download',
+    method: 'POST',
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'all-media-downloader.p.rapidapi.com'
+    },
+    data: {
+      url: ulrInstagram
+    }
+  };
+
+  try{
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+    console.log(response['720P'].url);
+    window.open(response['720P'].url,'_blank');
+    div.innerHTML = 'myterminal > Download inicado em nova guia.';
+  });
+}
+catch{
+  console.log(err);
+}
+
+document.getElementById("padrao2").append(div);
+}
+
   function resMp3(video_id){
   var div = document.createElement("div");
   div.classList.add('padrao');
@@ -722,6 +767,10 @@ function validateForm() {
         {
           pegarURL(x)
           resMp4Twitter(newurlInstagram)
+        }
+        else if (x.includes("tikTok") || x.includes("facebook") || x.includes("reddit")){
+          pegarURL(x)
+          resMp4Outros(newurlInstagram)
         }
 
       }
