@@ -430,24 +430,25 @@ function resShort(x){
   const settings = {
     async: true,
     crossDomain: true,
-    url: 'https://url-shortener23.p.rapidapi.com/shorten',
+    url: 'https://url-shortener-service.p.rapidapi.com/shorten',
     method: 'POST',
     headers: {
-      'content-type': 'application/json',
+      'content-type': 'application/x-www-form-urlencoded',
       'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
-      'X-RapidAPI-Host': 'url-shortener23.p.rapidapi.com'
+      'X-RapidAPI-Host': 'url-shortener-service.p.rapidapi.com'
     },
-    processData: false,
-    data: '{\r\n    "url": "'+ input_url +'",\r\n    "alias": ""\r\n}'
+    data: {
+      url: input_url
+    }
   };
 
 
   $.ajax(settings).done(function (response) {
     console.log(response);
-    div.innerHTML = 'Sua URL foi encurtada para: ' + response.short_url + ' e já está disponível no seu CTRL+V'
+    div.innerHTML = 'Sua URL foi encurtada para: ' + response['result_url'] + ' e já está disponível no seu CTRL+V'
     document.getElementById("padrao2").append(div);
 
-    navigator.clipboard.writeText(response.short_url);
+    navigator.clipboard.writeText(response['result_url'] );
 
   });
 
