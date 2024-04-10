@@ -292,7 +292,7 @@ function duvidaMp4(){
   div.innerHTML = 'Lista de comandos disponíveis junto ao mp4:'  +
   '<br/>mp4 + [URL]' +
   '<br/>ex: mp4 https://youtu.be/3ZnHr62W72Q' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube ou Instagram.' 
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube, Instagram e Twitter.' 
   document.getElementById("padrao2").append(div);
 }
 
@@ -524,6 +524,41 @@ catch{
 document.getElementById("padrao2").append(div);
 }
 
+function resMp4Twitter(ulrInstagram){
+
+  if(ulrInstagram.includes("mp4 ")){
+    ulrInstagram = ulrInstagram.split('mp4 ').join('');
+  }
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+
+  div.innerHTML = 'myterminal > Iniciando o download...'
+
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://twitter-downloader-download-twitter-videos-gifs-and-images.p.rapidapi.com/status?url=' + ulrInstagram,
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'twitter-downloader-download-twitter-videos-gifs-and-images.p.rapidapi.com'
+    }
+  };
+  try{
+  $.ajax(settings).done(function (response) {
+    console.log(response.media.video.videoVariants[0].url);
+    window.open(response.media.video.videoVariants[0].url,'_blank');
+    div.innerHTML = 'myterminal > Download inicado em nova guia.';
+  });
+}
+catch{
+  console.log(err);
+}
+
+document.getElementById("padrao2").append(div);
+}
+
   function resMp3(video_id){
   var div = document.createElement("div");
   div.classList.add('padrao');
@@ -682,6 +717,11 @@ function validateForm() {
           pegarURL(x)
           type = 'post'
           resMp4Instagram(newurlInstagram, type)
+        }
+        else if (x.includes("twitter"))
+        {
+          pegarURL(x)
+          resMp4Twitter(newurlInstagram)
         }
 
       }
