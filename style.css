@@ -2,7 +2,7 @@
 
 html{
     color: rgb(110, 247, 110);
-    font-family: 'VT323', monospace;
+    font-family: 'math', monospace;
 }
 
 body{
@@ -16,7 +16,7 @@ input{
     box-shadow: none;
     border: 0;
     color: rgb(110, 247, 110);
-    font-family: 'VT323', monospace;
+    font-family: 'math', monospace;
     font-size: 16px;
     width: 100%;
 }
@@ -82,6 +82,7 @@ a:hover{
 
 .information{
     color: rgb(255, 0, 157);
+    text-shadow: 0 0 5px rgb(255, 0, 157);
     display: inline;
 }
 

@@ -86,6 +86,7 @@ function resHelp(){
   '<br/>clear' +
   '<br/>color' +
   //'<br/>font' +
+  '<br/>fonte' +
   '<br/>help' +
   //'<br/>ipconfig' +
   '<br/>iploc'+
@@ -198,6 +199,28 @@ function resSobre(){
   document.getElementById("padrao2").append(div);
 }
 
+function resFonte(newFontesize){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  if(newFontesize > 30){
+    newFontesize = 30
+    div.innerHTML = 'Você escolheu um tamanho muito grande, a fonte foi alterada para o tamanho: ' + newFontesize;
+  }
+  else if (newFontesize < 10){
+    newFontesize = 10
+    div.innerHTML = 'Você escolheu um tamanho muito pequeno, a fonte foi alterada para o tamanho: ' + newFontesize;
+  }
+  else{
+    div.innerHTML = 'Tamanho da fonte alterado para: ' + newFontesize;
+  }
+  var fontepx = newFontesize + 'px'; 
+  var inputHtml = document.getElementsByTagName('input')[0]
+  inputHtml.style.fontSize = fontepx;
+  document.body.style.fontSize = fontepx;
+  document.getElementById("padrao2").append(div);
+}
+
+
 function resIpLoc(_newip){
 
   var div = document.createElement("div");
@@ -286,13 +309,24 @@ newip = ip.split('iploc ').join('');
 resIpLoc(newip);
 }
 
+function pegarFonteSize(fontesize){
+  if(fontesize[4] == "e"){
+    newFontesize = fontesize.split('fonte ').join('');
+  }
+  else{
+    newFontesize = fontesize.split('font ').join('');
+  }
+
+  resFonte(newFontesize);
+  }
+
 function duvidaMp4(){
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'Lista de comandos disponíveis junto ao mp4:'  +
   '<br/>mp4 + [URL]' +
   '<br/>ex: mp4 https://youtu.be/3ZnHr62W72Q' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube, Instagram, Facebook, Twitter, Tiktok e Reddit.' 
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube, Instagram, Facebook, Twitter, Tiktok e Reddit em 720p.' 
   document.getElementById("padrao2").append(div);
 }
 
@@ -333,6 +367,16 @@ function duvidaShort(){
   '<br/>short + [URL]' +
   '<br/>ex: short google.com' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para encurtar URLs. ' 
+  document.getElementById("padrao2").append(div);
+}
+
+function duvidaFonte(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Lista de comandos disponíveis junto ao fonte:'  +
+  '<br/>fonte + [Número da fonte]' +
+  '<br/>ex: fonte 18' +
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para mudar o tamanho da fonte, o valor padrão é 16. ' 
   document.getElementById("padrao2").append(div);
 }
 
@@ -734,6 +778,20 @@ function validateForm() {
     else if (x == "sobre" || x=="about") {
       divPadrao(x);
       resSobre();
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
+    else if (x == "fonte" || x=="font") {
+      divPadrao(x);
+      duvidaFonte();
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
+    else if (x.includes("fonte ") || x.includes("font ")) {
+      divPadrao(x);
+      pegarFonteSize(x);
       autoScrollDown();
       _input.value= "";
       return false;
