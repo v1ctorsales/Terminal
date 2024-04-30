@@ -47,22 +47,20 @@ function colorirDivPadrao(){
 
 function divPadrao(x){
 
-  var listaDeComandos = ["mp3", "mp4 ", "short", "arquivo", "clear","cls","help","ajuda","color","qr","sobre"];
+  var listaDeComandos = ["mp3", "mp4 ", "short", "arquivo", "clear","cls","help","ajuda","color","qr","sobre","iploc", "fonte", "font"];
   listaDeComandos.forEach(comando => {
-      if (x.includes(comando) && x.startsWith(comando)) {
-      var y = removerParteDaString(x, comando);
-      console.log(y); 
+      if (x.startsWith(comando + " ") || x === comando) { // Verifica se a string começa com o comando ou é exatamente igual ao comando
+        var y = removerParteDaString(x, comando);
+        console.log(y); 
   
-      var div = document.createElement("div");
-      div.classList.add('padrao');
-      div.innerHTML = "<div class='myTerminal'>myterminal ></div> " + y;
-      document.getElementById("padrao2").append(div);
-    }
-
+        var div = document.createElement("div");
+        div.classList.add('padrao');
+        div.innerHTML = "<div class='myTerminal'>myterminal ></div> " + y;
+        document.getElementById("padrao2").append(div);
+      }
   });
-
-
 }
+
 
 function autoScrollDown(){
   window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
@@ -204,7 +202,7 @@ function resFonte(newFontesize){
   div.classList.add('padrao');
   if(newFontesize > 30){
     newFontesize = 30
-    div.innerHTML = 'Você escolheu um tamanho muito grande, a fonte foi alterada para o tamanho: ' + newFontesize;
+        div.innerHTML = 'Você escolheu um tamanho muito pequeno, a fonte foi alterada para o tamanho: ' + newFontesize;
   }
   else if (newFontesize < 10){
     newFontesize = 10
