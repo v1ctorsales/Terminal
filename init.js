@@ -10,7 +10,7 @@ document.onkeydown = function(e) {
 };
 
 window.onload = function() {
-    startTime();
+    //startTime();
     document.getElementById("inputform").focus();
   };
 

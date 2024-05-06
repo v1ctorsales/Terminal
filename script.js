@@ -555,9 +555,15 @@ function resMp4Instagram(ulrInstagram, type){
   };
   try{
   $.ajax(settings).done(function (response) {
-    console.log(response.video);
-    window.open(response.video,'_blank');
-    div.innerHTML = 'myterminal > Download inicado em nova guia.';
+    console.log(response);
+    if(response == ""){
+      div.innerHTML = 'myterminal > Erro! Não temos acesso a conteúdos de contas privadas.';
+    }
+    else{
+      window.open(response.video,'_blank');
+      div.innerHTML = 'myterminal > Download inicado em nova guia.';
+    }
+
   });
 }
 catch{
