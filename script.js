@@ -47,7 +47,7 @@ function colorirDivPadrao(){
 
 function divPadrao(x){
 
-  var listaDeComandos = ["mp3", "mp4 ", "short", "arquivo", "clear","cls","help","ajuda","color","qr","sobre","iploc", "fonte", "font"];
+  var listaDeComandos = ["mp3", "mp4", "short", "arquivo", "clear","cls","help","ajuda","color","qr","sobre","iploc", "fonte", "font"];
   listaDeComandos.forEach(comando => {
       if (x.startsWith(comando + " ") || x === comando) { // Verifica se a string começa com o comando ou é exatamente igual ao comando
         var y = removerParteDaString(x, comando);
