@@ -47,7 +47,7 @@ function colorirDivPadrao(){
 
 function divPadrao(x){
 
-  var listaDeComandos = ["mp3", "mp4", "short", "arquivo", "clear","cls","help","ajuda","color","qr","sobre","iploc", "fonte", "font"];
+  var listaDeComandos = ["mp3", "mp4", "short", "arquivo", "clear","cls","help","ajuda","color","qr","sobre","iploc", "fonte", "font", "read", "ler"];
   listaDeComandos.forEach(comando => {
       if (x.startsWith(comando + " ") || x === comando) { // Verifica se a string começa com o comando ou é exatamente igual ao comando
         var y = removerParteDaString(x, comando);
@@ -92,6 +92,7 @@ function resHelp(){
   '<br/>mp3' +
   '<br/>mp4' +
   '<br/>qr'+
+  '<br/>read'+
   '<br/>short'+
   '<br/>sobre' +
   "</div>"
@@ -368,6 +369,16 @@ function duvidaShort(){
   document.getElementById("padrao2").append(div);
 }
 
+function duvidaRead(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Lista de comandos disponíveis junto ao read:'  +
+  '<br/>read + [URL]' +
+  '<br/>ex: read https://www.estadao.com.br/economia/acordo-itaipu-conta-luz-obras/' +
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para visualizar sites de notícias passando pelo paywall. ' 
+  document.getElementById("padrao2").append(div);
+}
+
 function duvidaFonte(){
   var div = document.createElement("div");
   div.classList.add('padrao');
@@ -496,6 +507,24 @@ function resShort(x){
 
 
 
+
+}
+
+function resRead(x){
+
+  if(x.startsWith("read ")){
+    url = x.split('read ').join('');
+  }
+  else if(x.startsWith("ler ")){
+    url = x.split('ler ').join('');
+  }
+
+  window.open("https://leiaisso.net/" + url) 
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Página aberta em nova aba. Boa leitura!'
+  document.getElementById("padrao2").append(div);
 
 }
 
@@ -962,6 +991,20 @@ function validateForm() {
     else if (x ==("arquivo cachepass") || (x == "arq cachepass")) {
       divPadrao(x);
       resArquivoCachePass(x);
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
+    else if (x ==("read") || (x == "ler")) {
+      divPadrao(x);
+      duvidaRead();
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
+    else if (x.startsWith("read ") || x.startsWith("ler ")) {
+      divPadrao(x);
+      resRead(x);
       autoScrollDown();
       _input.value= "";
       return false;
