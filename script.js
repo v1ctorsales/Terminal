@@ -47,7 +47,7 @@ function colorirDivPadrao(){
 
 function divPadrao(x){
 
-  var listaDeComandos = ["mp3", "mp4", "short", "arquivo", "clear","cls","help","ajuda","color","qr","sobre","iploc", "fonte", "font", "read", "ler"];
+  var listaDeComandos = ["mp3", "mp4", "short", "arquivo", "clear","cls","help","ajuda","color","qr","sobre","iploc", "fonte", "font", "read", "ler", "ai", "ia", "chat"];
   listaDeComandos.forEach(comando => {
       if (x.startsWith(comando + " ") || x === comando) { // Verifica se a string começa com o comando ou é exatamente igual ao comando
         var y = removerParteDaString(x, comando);
@@ -86,6 +86,7 @@ function resHelp(){
   //'<br/>font' +
   '<br/>fonte' +
   '<br/>help' +
+  '<br/>ia' +
   //'<br/>ipconfig' +
   '<br/>iploc'+
   //'<br/>lang' +
@@ -369,6 +370,16 @@ function duvidaShort(){
   document.getElementById("padrao2").append(div);
 }
 
+function duvidaIA(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Lista de comandos disponíveis junto ao ia:'  +
+  '<br/>ia + [Texto]' +
+  '<br/>ex: ia Por quê o Cruzeiro é o melhor time de Minas Gerais?' +
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para gerar uma conversa com o chat GPT.' 
+  document.getElementById("padrao2").append(div);
+}
+
 function duvidaRead(){
   var div = document.createElement("div");
   div.classList.add('padrao');
@@ -420,6 +431,47 @@ function resmandarMsg(x){
   document.getElementById("padrao2").append(div);
 
     var win = window.open("https://wa.me/"+input_url)
+}
+
+function resIA(x){
+  if(x.startsWith("ia ")){
+    input_url = x.split('ia ').join('');
+  }
+  else if(x.startsWith("ai ")){
+    input_url = x.split('ai ').join('');
+  }
+  else if(x.startsWith("chat ")){
+    input_url = x.split('chat ').join('');
+  }
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Enviando sua mensagem aos servidores do Chat GPT...'
+  document.getElementById("padrao2").append(div);
+
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://chatgpt-best-price.p.rapidapi.com/v1/chat/completions',
+    method: 'POST',
+    headers: {
+      'x-rapidapi-key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'x-rapidapi-host': 'chatgpt-best-price.p.rapidapi.com',
+      'Content-Type': 'application/json'
+    },
+    processData: false,
+    data: '{"model":"gpt-3.5-turbo","messages":[{"role":"user","content":"' + input_url + '"}]}'
+  };
+  
+  try{
+
+  $.ajax(settings).done(function (response) {
+    div.innerHTML = "🤖 " + response.choices[0].message.content;
+  });
+      
+}catch{
+  div.innerHTML = "Houve um erro ao se conectar com a API do Chat GPT."
+}
 }
 
 function resArquivoCachePass(x){
@@ -1005,6 +1057,20 @@ function validateForm() {
     else if (x.startsWith("read ") || x.startsWith("ler ")) {
       divPadrao(x);
       resRead(x);
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
+    else if (x ==("ai") || (x == "ia") || (x == "chat")){
+      divPadrao(x);
+      duvidaIA();
+      autoScrollDown();
+      _input.value= "";
+      return false;
+    }
+    else if (x.startsWith("ai ") || x.startsWith("ia ") || x.startsWith("chat ")) {
+      divPadrao(x);
+      resIA(x);
       autoScrollDown();
       _input.value= "";
       return false;
