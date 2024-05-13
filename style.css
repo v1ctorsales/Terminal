@@ -1,19 +1,20 @@
 
 
 html{
-    color: rgb(110, 247, 110);
+    color: #50FA7B;
     font-family: 'math', monospace;
 }
 
 body{
-    background-color: rgb(-99, -99, -99);
-    width: 98%;
+    background-color: #282A36;
+    width: 97%;
     height: 98%;
     margin-bottom: 0;
+    padding: 1%;
 }
 
 input{
-    background-color: rgb(0, 0, 0);
+    background-color: #282A36;
     box-shadow: none;
     border: 0;
     color: rgb(110, 247, 110);
@@ -23,7 +24,6 @@ input{
 }
 
 input:focus{
-    background-color: rgb(0, 0, 0);
     box-shadow: none;
     outline: none;
 }
@@ -53,7 +53,7 @@ a:hover{
 
 .welcome{
     margin-bottom: 1rem;
-    color: rgb(50, 128, 57);
+    color: #F1FA8C;
 }
 
 .padrao{
@@ -81,11 +81,11 @@ a:hover{
 .erroSimples{
     display: inline;
 
-    color: rgb(97, 1, 1);
+    color: #FF5555;
 }
 
 .information{
-    color: rgb(255, 0, 157);
+    color: #FF79C6;
     text-shadow: 0 0 5px rgb(255, 0, 157);
     display: inline;
 }

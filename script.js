@@ -37,11 +37,11 @@ function SetaBaixo(){
 function colorirDivPadrao(){
   var elementoWelcome = document.querySelector('.welcome');
   elementoWelcome.style.removeProperty('color');
-  elementoWelcome.style.color = darkcolor;
+  //elementoWelcome.style.color = darkcolor;
   var elementosTerminal = document.querySelectorAll('.myTerminal');
   elementosTerminal.forEach(function(elemento) {
       elemento.style.removeProperty('color');
-      elemento.style.color = darkcolor;
+      //elemento.style.color = darkcolor;
   });
 }
 
@@ -118,9 +118,9 @@ function resColor(){
 }
 
 function resColorGreen(){
-  document.documentElement.style.color="rgb(110, 247, 110)";
-  document.getElementsByTagName('input')[0].style.color="rgb(110, 247, 110)";
-  document.getElementsByTagName('a')[0].style.color="rgb(110, 247, 110)";
+  document.documentElement.style.color="#50FA7B";
+  document.getElementsByTagName('input')[0].style.color="#50FA7B";
+  document.getElementsByTagName('a')[0].style.color="#50FA7B";
   $('.logostl').attr("src","imgs/greenman.gif");
 
   darkcolor = "rgb(50, 128, 57)";
