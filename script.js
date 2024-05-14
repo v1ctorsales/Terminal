@@ -81,21 +81,21 @@ function resHelp(){
   div.classList.add('padrao');
   div.innerHTML = 'myterminal > Lista de todos os comandos disponíveis :' + '<div class="information">' +
   //'<br/>arquivo' +
-  '<br/>clear' +
-  '<br/>color' +
+  '<br/>clear <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Limpe o chat</div>' +
+  '<br/>color <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mude a cor do texto</div>' +
   //'<br/>font' +
-  '<br/>fonte' +
-  '<br/>help' +
-  '<br/>ia' +
+  '<br/>fonte <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mude o tamanho da fonte</div>' +
+  '<br/>help <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acho que você já sabe o quê esse comando faz</div>' +
+  '<br/>ia <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicie uma conversa com o ChatGPT</div>' +
   //'<br/>ipconfig' +
-  '<br/>iploc'+
+  '<br/>iploc <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Localize um IP</div>'+
   //'<br/>lang' +
-  '<br/>mp3' +
-  '<br/>mp4' +
-  '<br/>qr'+
-  '<br/>read'+
-  '<br/>short'+
-  '<br/>sobre' +
+  '<br/>mp3 <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baixe um áudio do Youtube</div>' +
+  '<br/>mp4 <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baixe um vídeo de (quase) qualquer site</div>' +
+  '<br/>qr <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Crie um QRcode</div>'+
+  '<br/>read <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leia matérias sem pagar a mensalidade do site</div>'+
+  '<br/>short <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Encurte URLs</div>'+
+  '<br/>sobre <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Informações sobre o sistema</div>' +
   "</div>"
   //'<br/>wpp' 
 
