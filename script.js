@@ -165,9 +165,9 @@ function resColorPink(){
 }
 
 function resColorOrange(){
-  document.documentElement.style.color="orange";
-  document.getElementsByTagName('input')[0].style.color="orange";
-  document.getElementsByTagName('a')[0].style.color="orange";
+  document.documentElement.style.color="#FFB86C";
+  document.getElementsByTagName('input')[0].style.color="#FFB86C";
+  document.getElementsByTagName('a')[0].style.color="#FFB86C";
   $('.logostl').attr("src","");
 
   darkcolor = 'rgb(138 79 11)' 
