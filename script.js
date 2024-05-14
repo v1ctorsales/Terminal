@@ -1,6 +1,7 @@
 var historico = []
 var aumento = 0;
 var darkcolor = "rgb(50, 128, 57)"
+var controladorDivPadrao = 0;
 
 
 function Armazenar (x){
@@ -76,45 +77,66 @@ function comandoInvalido(x){
   //alert("Comando inválido");
 }
 
-function resHelp(){
+function resHelp() {
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'myterminal > Lista de todos os comandos disponíveis :' + '<div class="information">' +
-  //'<br/>arquivo' +
-  '<br/>clear <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Limpe o chat</div>' +
-  '<br/>color <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mude a cor do texto</div>' +
-  //'<br/>font' +
-  '<br/>fonte <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mude o tamanho da fonte</div>' +
-  '<br/>help <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acho que você já sabe o quê esse comando faz</div>' +
-  '<br/>ia <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicie uma conversa com o ChatGPT</div>' +
-  //'<br/>ipconfig' +
-  '<br/>iploc <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Localize um IP</div>'+
-  //'<br/>lang' +
-  '<br/>mp3 <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baixe um áudio do Youtube</div>' +
-  '<br/>mp4 <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baixe um vídeo de (quase) qualquer site</div>' +
-  '<br/>qr <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Crie um QRcode</div>'+
-  '<br/>read <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leia matérias sem pagar a mensalidade do site</div>'+
-  '<br/>short <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Encurte URLs</div>'+
-  '<br/>sobre <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Informações sobre o sistema</div>' +
-  "</div>"
-  //'<br/>wpp' 
-
   document.getElementById("padrao2").append(div);
-      window.scrollTo(0, document.body.scrollHeight);
+
+  var texto  = 'myterminal > Lista de todos os comandos disponíveis :' +
+      '<div class="information">' +
+      '<br/>clear <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Limpe o chat</div>' +
+      '<br/>color <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mude a cor do texto</div>' +
+      '<br/>fonte <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mude o tamanho da fonte</div>' +
+      '<br/>help <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acho que você já sabe o quê esse comando faz</div>' +
+      '<br/>ia <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicie uma conversa com o ChatGPT</div>' +
+      '<br/>iploc <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Localize um IP</div>' +
+      '<br/>mp3 <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baixe um áudio do Youtube</div>' +
+      '<br/>mp4 <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baixe um vídeo de (quase) qualquer site</div>' +
+      '<br/>qr <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Crie um QRcode</div>' +
+      '<br/>read <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leia matérias sem pagar a mensalidade do site</div>' +
+      '<br/>short <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Encurte URLs</div>' +
+      '<br/>sobre <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Informações sobre o sistema</div>' +
+      "</div>";
+  Digitar(texto);
+
+}
+
+function Digitar(texto) {
+
+  var elementosPai = document.getElementsByClassName("padrao");
+  var ultimoElemento = elementosPai[elementosPai.length - 1];
+  
+  var elementoPai = ultimoElemento;
+  var index = 0;
+  var interval = setInterval(function() {
+      if (index <= texto.length) {
+          elementoPai.innerHTML =  texto.slice(0, index++).replace("/&nbsp;/g", '<span class="hide">&nbsp;</span>');
+          window.scrollTo(0, document.body.scrollHeight); // Role a página para baixo enquanto adiciona cada caractere
+      } else {
+          clearInterval(interval);
+          // Remover a classe de ocultar quando a digitação estiver completa
+          var spans = elementoPai.querySelectorAll('.hide');
+          for (var i = 0; i < spans.length; i++) {
+              spans[i].classList.remove('hide');
+          }
+      }
+  }, 0); // Intervalo de tempo entre cada caractere (em milissegundos)
 }
 
 function resColor(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao color:'  +
-  '<br/>color green' +
-  '<br/>color red' +
-  '<br/>color blue' +
-  '<br/>color white' +
-  '<br/>color pink' +
-  '<br/>color orange'+
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Estes comandos são utilizados para trocar a cor dos textos no terminal. ' 
   document.getElementById("padrao2").append(div);
+  texto =  'Lista de comandos disponíveis junto ao color:'  +
+  '<br/>color blue' +
+  '<br/>color green' +
+  '<br/>color pink' +
+  '<br/>color red' +
+  '<br/>color white' +
+  '<br/>color yellow'+
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Estes comandos são utilizados para trocar a cor dos textos no terminal. ' 
+  Digitar(texto);
+
 }
 
 function resColorGreen(){
@@ -155,19 +177,19 @@ function resColorWhite(){
 }
 
 function resColorPink(){
-  document.documentElement.style.color="#cb7dff";
-  document.getElementsByTagName('input')[0].style.color="#cb7dff";
-  document.getElementsByTagName('a')[0].style.color="#cb7dff";
+  document.documentElement.style.color="#BD93F9";
+  document.getElementsByTagName('input')[0].style.color="#BD93F9";
+  document.getElementsByTagName('a')[0].style.color="#BD93F9";
   $('.logostl').attr("src","");
   //$('.logostl').attr("src","https://im2.ezgif.com/tmp/ezgif-2-52fd5176f7.gif");
   
   darkcolor = 'rgb(94 61 102)'
 }
 
-function resColorOrange(){
-  document.documentElement.style.color="#FFB86C";
-  document.getElementsByTagName('input')[0].style.color="#FFB86C";
-  document.getElementsByTagName('a')[0].style.color="#FFB86C";
+function resColorYellow(){
+  document.documentElement.style.color="#F1FA8C";
+  document.getElementsByTagName('input')[0].style.color="#F1FA8C";
+  document.getElementsByTagName('a')[0].style.color="#F1FA8C";
   $('.logostl').attr("src","");
 
   darkcolor = 'rgb(138 79 11)' 
@@ -192,32 +214,34 @@ function resLang(){
 function resSobre(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Mais informações sobre este sistema:' +
+  document.getElementById("padrao2").append(div);
+  texto = 'Mais informações sobre este sistema:' +
   '<br/><br/>Este Terminal foi desenvolvido por Victor Sales e tem o intuito de reunir ferramentas úteis para o desenvolvedor.' +
   '<br/>Quem sabe você não encontra algo útil pra você também?'+
   '<br/>O aplicativo foi desenvolvido com HTML, CSS e JavaScript'
-  document.getElementById("padrao2").append(div);
+  Digitar(texto);
 }
 
 function resFonte(newFontesize){
   var div = document.createElement("div");
   div.classList.add('padrao');
+  document.getElementById("padrao2").append(div);
   if(newFontesize > 30){
     newFontesize = 30
-        div.innerHTML = 'Você escolheu um tamanho muito pequeno, a fonte foi alterada para o tamanho: ' + newFontesize;
+        texto = 'Você escolheu um tamanho muito pequeno, a fonte foi alterada para o tamanho: ' + newFontesize;
   }
   else if (newFontesize < 10){
     newFontesize = 10
-    div.innerHTML = 'Você escolheu um tamanho muito pequeno, a fonte foi alterada para o tamanho: ' + newFontesize;
+    texto = 'Você escolheu um tamanho muito pequeno, a fonte foi alterada para o tamanho: ' + newFontesize;
   }
   else{
-    div.innerHTML = 'Tamanho da fonte alterado para: ' + newFontesize;
+    texto = 'Tamanho da fonte alterado para: ' + newFontesize;
   }
   var fontepx = newFontesize + 'px'; 
   var inputHtml = document.getElementsByTagName('input')[0]
   inputHtml.style.fontSize = fontepx;
   document.body.style.fontSize = fontepx;
-  document.getElementById("padrao2").append(div);
+  Digitar(texto);
 }
 
 
@@ -244,7 +268,7 @@ function resIpLoc(_newip){
     console.log(stringrede)
     if(!(stringrede).includes("null")){
         try{
-        div.innerHTML = 'ip : ' + response.ip + '<br>'+
+        texto = 'ip : ' + response.ip + '<br>'+
         'rede : ' + response.cidr + '<br>'+
         'continente : '+ response.continent + '<br>'+
         'país : ' + response.country + '<br>'+
@@ -254,14 +278,16 @@ function resIpLoc(_newip){
         }
     catch{
       console.log('Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.')
-      div.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.'
+      texto = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.'
+      Digitar(texto);
     }
   }
   else{
     div.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> IP inválido.'
+    Digitar(texto);
 
   }
-     document.getElementById("padrao2").append(div);
+     Digitar(texto);
 });
 
 
@@ -323,81 +349,89 @@ function pegarFonteSize(fontesize){
 function duvidaMp4(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao mp4:'  +
+  document.getElementById("padrao2").append(div);
+  texto = 'Lista de comandos disponíveis junto ao mp4:'  +
   '<br/>mp4 + [URL]' +
   '<br/>ex: mp4 https://youtu.be/3ZnHr62W72Q' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube, Instagram, Facebook, Twitter, Tiktok e Reddit em 720p.' 
-  document.getElementById("padrao2").append(div);
+  Digitar(texto);
 }
 
 function duvidaMp3(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao mp3:'  +
+  document.getElementById("padrao2").append(div);
+  texto = 'Lista de comandos disponíveis junto ao mp3:'  +
   '<br/>mp3 + [URL DO YOUTUBE]' +
   '<br/>ex: mp3 https://youtu.be/3ZnHr62W72Q' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar áudios de vídeos do YouTube. ' 
-  document.getElementById("padrao2").append(div);
+  Digitar(texto);
 }
 
 function duvidaQR(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao QR:'  +
+  document.getElementById("padrao2").append(div);
+  texto = 'Lista de comandos disponíveis junto ao QR:'  +
   '<br/>qr + [URL]' +
   '<br/>ex: qr google.com' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para criar um QR Code com destino à uma URL. ' 
-  document.getElementById("padrao2").append(div);
+  Digitar(texto);
 }
 
 function duvidaIploc(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao iploc:'  +
+  document.getElementById("padrao2").append(div);
+  texto = 'Lista de comandos disponíveis junto ao iploc:'  +
   '<br/>iploc + [ipv4]' +
   '<br/>ex: iploc 8.8.8.8' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para obter informações sobre um Ipv4 ' 
-  document.getElementById("padrao2").append(div);
+  Digitar(texto);
 }
 
 function duvidaShort(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao short:'  +
+  document.getElementById("padrao2").append(div);
+  texto = 'Lista de comandos disponíveis junto ao short:'  +
   '<br/>short + [URL]' +
   '<br/>ex: short google.com' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para encurtar URLs. ' 
-  document.getElementById("padrao2").append(div);
+  Digitar(texto);
 }
 
 function duvidaIA(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao ia:'  +
+  document.getElementById("padrao2").append(div);
+  texto = 'Lista de comandos disponíveis junto ao ia:'  +
   '<br/>ia + [Texto]' +
   '<br/>ex: ia Por quê o Cruzeiro é o melhor time de Minas Gerais?' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para gerar uma conversa com o chat GPT.' 
-  document.getElementById("padrao2").append(div);
+  Digitar(texto);
 }
 
 function duvidaRead(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao read:'  +
+  document.getElementById("padrao2").append(div);
+  fonte = 'Lista de comandos disponíveis junto ao read:'  +
   '<br/>read + [URL]' +
   '<br/>ex: read https://www.estadao.com.br/economia/acordo-itaipu-conta-luz-obras/' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para visualizar sites de notícias passando pelo paywall. ' 
-  document.getElementById("padrao2").append(div);
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para visualizar sites de notícias passando pelo paywall. ';
+  Digitar(texto);
 }
 
 function duvidaFonte(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao fonte:'  +
+  document.getElementById("padrao2").append(div);
+  texto = 'Lista de comandos disponíveis junto ao fonte:'  +
   '<br/>fonte + [Número da fonte]' +
   '<br/>ex: fonte 18' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para mudar o tamanho da fonte, o valor padrão é 16. ' 
-  document.getElementById("padrao2").append(div);
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para mudar o tamanho da fonte, o valor padrão é 16. ';
+  Digitar(texto);
 }
 
 function duvidaWpp(){
@@ -466,12 +500,15 @@ function resIA(x){
   try{
 
   $.ajax(settings).done(function (response) {
-    div.innerHTML = "🤖 " + response.choices[0].message.content;
+    texto = "🤖 <div class='tooltip'> ChatGPT:&nbsp;</div>" + response.choices[0].message.content;
+    Digitar(texto);
   });
       
 }catch{
-  div.innerHTML = "Houve um erro ao se conectar com a API do Chat GPT."
+  texto = "Houve um erro ao se conectar com a API do Chat GPT."
+  Digitar(texto);
 }
+
 }
 
 function resArquivoCachePass(x){
@@ -504,14 +541,17 @@ function resQR(x){ //dando erro
     }
   }
   else{
-    div.innerHTML = 'URL inválida'
+    texto = 'URL inválida'
+    Digitar(texto);
   }
 
   try{
-    div.innerHTML = 'QR Code de '+ input_url + ' gerado com sucesso! <br> <br>' + '<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='+input_url+'">'
+    texto = 'QR Code de '+ input_url + ' gerado com sucesso! <br> <br>' + '<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='+input_url+'">'
+    Digitar(texto);
   }
   catch{
-    div.innerHTML = 'Erro ao gerar o QR Code'
+    texto = 'Erro ao gerar o QR Code'
+    Digitar(texto);
   }
 
     }
@@ -524,6 +564,7 @@ function resShort(x){
   div.classList.add('padrao');
   div.innerHTML = 'Encurtando URL...'
   document.getElementById("padrao2").append(div);
+
 
   if(input_url.startsWith("http")){
 
@@ -550,8 +591,8 @@ function resShort(x){
 
   $.ajax(settings).done(function (response) {
     console.log(response);
-    div.innerHTML = 'Sua URL foi encurtada para: ' + response['result_url'] + ' e já está disponível no seu CTRL+V'
-    document.getElementById("padrao2").append(div);
+    texto = 'Sua URL foi encurtada para: ' + response['result_url'] + ' e já está disponível no seu CTRL+V'
+    Digitar(texto)
 
     navigator.clipboard.writeText(response['result_url'] );
 
@@ -845,9 +886,9 @@ function validateForm() {
       _input.value= "";
       return false;
     }
-    else if (x == "color orange") {
+    else if (x == "color yellow") {
       divPadrao(x);
-      resColorOrange();
+      resColorYellow();
       autoScrollDown();
       colorirDivPadrao()
       _input.value= "";

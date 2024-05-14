@@ -97,6 +97,10 @@ a:hover{
 
 }
 
+.hide {
+    visibility: hidden;
+}
+
 .tooltip{
     display: inline;
     color: #ffb86c;
