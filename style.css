@@ -121,3 +121,14 @@ a:hover{
         display: none;
     }
   }
+
+  /* MOBILE CONFIG */
+
+  @media (max-width: 767px) {
+    body{
+        width: auto;
+    }
+    .dev{
+        text-align: left;
+    }
+  }
