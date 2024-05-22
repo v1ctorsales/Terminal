@@ -948,7 +948,7 @@ function validateForm() {
           type = 'post'
           resMp4Instagram(newurlInstagram, type)
         }
-        else if (x.includes("twitter"))
+        else if (x.includes("x.com") || x.includes("twitter"))
         {
           pegarURL(x)
           resMp4Twitter(newurlInstagram)
