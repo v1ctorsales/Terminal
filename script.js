@@ -228,7 +228,7 @@ function resFonte(newFontesize){
   document.getElementById("padrao2").append(div);
   if(newFontesize > 30){
     newFontesize = 30
-        texto = 'Você escolheu um tamanho muito pequeno, a fonte foi alterada para o tamanho: ' + newFontesize;
+        texto = 'Você escolheu um tamanho muito grande, a fonte foi alterada para o tamanho: ' + newFontesize;
   }
   else if (newFontesize < 10){
     newFontesize = 10
@@ -621,6 +621,33 @@ function resRead(x){
 
 }
 
+function resMp4TikTok(url){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'myterminal > Iniciando o download...'
+  
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://tiktok-download-without-watermark.p.rapidapi.com/analysis?url=' + url,
+    method: 'GET',
+    headers: {
+      'x-rapidapi-key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'x-rapidapi-host': 'tiktok-download-without-watermark.p.rapidapi.com'
+    }
+  };
+  try{
+  $.ajax(settings).done(function (response) {
+    window.open(response.data.play,'_blank');
+
+  });    
+}catch(err){
+  console.log(err);
+}
+div.innerHTML = 'myterminal > Download inicado em nova guia.'
+document.getElementById("padrao2").append(div); 
+}
+
 function resMp4Youtube(video_id){
   var div = document.createElement("div");
 div.classList.add('padrao');
@@ -770,6 +797,7 @@ function resMp4Outros(ulrInstagram){
 }
 catch{
   console.log(err);
+  div.innerHTML = 'myterminal > Houve um erro :' + err;
 }
 
 document.getElementById("padrao2").append(div);
@@ -953,7 +981,11 @@ function validateForm() {
           pegarURL(x)
           resMp4Twitter(newurlInstagram)
         }
-        else if (x.includes("tikTok") || x.includes("facebook") || x.includes("reddit")){
+        else if(x.includes("tiktok.")){
+          pegarURL(x);
+          resMp4TikTok(x);
+        }
+        else if (x.includes("facebook") || x.includes("reddit")){
           pegarURL(x)
           resMp4Outros(newurlInstagram)
         }
