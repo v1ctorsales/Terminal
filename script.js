@@ -505,8 +505,30 @@ function resIA(x){
   });
       
 }catch{
-  texto = "Houve um erro ao se conectar com a API do Chat GPT."
-  Digitar(texto);
+    try{
+    const settings = {
+      async: true,
+      crossDomain: true,
+      url: 'https://chatgpt-api8.p.rapidapi.com/',
+      method: 'POST',
+      headers: {
+        'x-rapidapi-key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+        'x-rapidapi-host': 'chatgpt-api8.p.rapidapi.com',
+        'Content-Type': 'application/json'
+      },
+      processData: false,
+      data: '{"0":{"content":"Hello! I\'m an AI assistant bot based on ChatGPT 3. How may I help you?","role":"system"},"1":{"content":"'+ input_url +'","role":"user"}}'
+    };
+    
+    $.ajax(settings).done(function (response) {
+      texto = "🤖 <div class='tooltip'> ChatGPT:&nbsp;</div>" + response.text;
+      Digitar(texto);
+    });
+  }
+  catch{
+    texto = "Houve um erro ao se conectar com a API do Chat GPT."
+    Digitar(texto);
+  }
 }
 
 }
