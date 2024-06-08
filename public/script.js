@@ -579,6 +579,7 @@ function resMp4TikTok(url) {
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'myterminal > Iniciando o download...';
+  document.getElementById("padrao2").append(div);
 
   // Faz a chamada AJAX para o endpoint no backend
   $.ajax({
@@ -604,6 +605,7 @@ function resMp4Youtube(video_id) {
   div.classList.add('padrao');
   console.log(video_id);
   div.innerHTML = 'myterminal > Iniciando o download...';
+  document.getElementById("padrao2").append(div);
 
   // Faz a chamada AJAX para o endpoint no backend
   $.ajax({
@@ -634,6 +636,7 @@ function resMp4Instagram(urlInstagram, type) {
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'myterminal > Iniciando o download...';
+  document.getElementById("padrao2").append(div);
 
   // Faz a chamada AJAX para o endpoint no backend
   $.ajax({
@@ -665,6 +668,7 @@ function resMp4Twitter(urlTwitter) {
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'myterminal > Iniciando o download...';
+  document.getElementById("padrao2").append(div);
 
   // Faz a chamada AJAX para o endpoint no backend
   $.ajax({
@@ -697,6 +701,7 @@ function resMp4Outros(url) {
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = 'myterminal > Iniciando o download...';
+  document.getElementById("padrao2").append(div);
 
   // Faz a chamada AJAX para o endpoint no backend
   $.ajax({
@@ -723,6 +728,7 @@ function resMp3(video_id) {
   div.classList.add('padrao');
   
   div.innerHTML = 'myterminal > Iniciando o download...';
+  document.getElementById("padrao2").append(div);
   
   // Faz a chamada AJAX para o endpoint no backend
   $.ajax({
