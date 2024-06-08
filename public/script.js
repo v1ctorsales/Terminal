@@ -248,11 +248,11 @@ function resFonte(newFontesize){
 function resIpLoc(_newip) {
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = "Carregando informações sobre o IP..."
+  div.innerHTML = "Carregando informações sobre o IP...";
   document.getElementById("padrao2").append(div);
 
   $.ajax({
-    url: `/.netlify/functions/getIpInfo?_newip=${_newip}`,
+    url: `/api/getIpInfo?_newip=${_newip}`,
     method: 'GET',
   }).done(function (response) {
     let stringrede = JSON.stringify(response.cidr);
@@ -276,6 +276,7 @@ function resIpLoc(_newip) {
     div.innerHTML = texto;
   });
 }
+
 
 function resNetInfo(){
     $.getJSON('https://api.db-ip.com/v2/free/self', function(data) {

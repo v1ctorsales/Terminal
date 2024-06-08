@@ -1,11 +1,13 @@
+// api/getIpInfo.js
+
 const fetch = require('node-fetch');
 
-exports.handler = async function(event, context) {
+module.exports = async (req, res) => {
   // Extrair parâmetros de consulta da URL
-  const _newip = event.queryStringParameters._newip;
+  const { _newip } = req.query;
 
-  // Fazer a requisição à API externa
   try {
+    // Fazer a requisição à API externa
     const response = await fetch(`https://ip-reputation-geoip-and-detect-vpn.p.rapidapi.com/?ip=${_newip}`, {
       method: 'GET',
       headers: {
@@ -16,15 +18,10 @@ exports.handler = async function(event, context) {
 
     const data = await response.json();
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify(data),
-    };
-
+    // Responder com os dados obtidos
+    res.status(200).json(data);
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to fetch data' }),
-    };
+    // Responder com um erro se algo der errado
+    res.status(500).json({ error: 'Failed to fetch data' });
   }
 };
