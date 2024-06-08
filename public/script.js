@@ -252,7 +252,7 @@ function resIpLoc(_newip) {
   document.getElementById("padrao2").append(div);
 
   $.ajax({
-    url: `/api/getIpInfo?_newip=${_newip}`,
+    url: `../api/getIpInfo?_newip=${_newip}`,
     method: 'GET',
   }).done(function (response) {
     let stringrede = JSON.stringify(response.cidr);
