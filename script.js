@@ -228,7 +228,7 @@ function resFonte(newFontesize){
   document.getElementById("padrao2").append(div);
   if(newFontesize > 30){
     newFontesize = 30
-        texto = 'Você escolheu um tamanho muito grande, a fonte foi alterada para o tamanho: ' + newFontesize;
+        texto = 'Você escolheu um tamanho muito pequeno, a fonte foi alterada para o tamanho: ' + newFontesize;
   }
   else if (newFontesize < 10){
     newFontesize = 10
@@ -245,38 +245,53 @@ function resFonte(newFontesize){
 }
 
 
-function resIpLoc(_newip) {
+function resIpLoc(_newip){
+
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = "Carregando informações sobre o IP...";
+  div.innerHTML = "Carregando informações sobre o IP..."
   document.getElementById("padrao2").append(div);
 
-  $.ajax({
-    url: `/api/getIploc?_newip=${_newip}`,
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://ip-reputation-geoip-and-detect-vpn.p.rapidapi.com/?ip='+_newip,
     method: 'GET',
-  }).done(function (response) {
-    let stringrede = JSON.stringify(response.cidr);
-    console.log(stringrede);
-    if (!(stringrede).includes("null")) {
-      try {
-        var texto = 'ip : ' + response.ip + '<br>' +
-          'rede : ' + response.cidr + '<br>' +
-          'continente : ' + response.continent + '<br>' +
-          'país : ' + response.country + '<br>' +
-          'região : ' + response.region + '<br>' +
-          'cidade : ' + response.city + '<br>' +
-          'vpn/proxy : ' + response.is_vpn_proxy + '<br>';
-      } catch {
-        console.log('Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.');
-        texto = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.';
-      }
-    } else {
-      texto = '<i class="fa-solid fa-triangle-exclamation"></i> IP inválido.';
+    headers: {
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'ip-reputation-geoip-and-detect-vpn.p.rapidapi.com'
     }
-    div.innerHTML = texto;
-  });
-}
+  };
+  
+  $.ajax(settings).done(function (response) {
+    let stringrede = JSON.stringify(response.cidr)
+    console.log(stringrede)
+    if(!(stringrede).includes("null")){
+        try{
+        texto = 'ip : ' + response.ip + '<br>'+
+        'rede : ' + response.cidr + '<br>'+
+        'continente : '+ response.continent + '<br>'+
+        'país : ' + response.country + '<br>'+
+        'região : ' + response.region + '<br>'+
+        'cidade : ' + response.city + '<br>' +
+        'vpn/proxy : ' + response.is_vpn_proxy + '<br>'
+        }
+    catch{
+      console.log('Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.')
+      texto = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.'
+      Digitar(texto);
+    }
+  }
+  else{
+    div.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> IP inválido.'
+    Digitar(texto);
 
+  }
+     Digitar(texto);
+});
+
+
+}
 
 function resNetInfo(){
     $.getJSON('https://api.db-ip.com/v2/free/self', function(data) {
@@ -452,12 +467,14 @@ function resmandarMsg(x){
     var win = window.open("https://wa.me/"+input_url)
 }
 
-function resIA(x) {
-  if (x.startsWith("ia ")) {
+function resIA(x){
+  if(x.startsWith("ia ")){
     input_url = x.split('ia ').join('');
-  } else if (x.startsWith("ai ")) {
+  }
+  else if(x.startsWith("ai ")){
     input_url = x.split('ai ').join('');
-  } else if (x.startsWith("chat ")) {
+  }
+  else if(x.startsWith("chat ")){
     input_url = x.split('chat ').join('');
   }
 
@@ -466,22 +483,33 @@ function resIA(x) {
   div.innerHTML = 'Enviando sua mensagem aos servidores do Chat GPT...'
   document.getElementById("padrao2").append(div);
 
-  // Faz a chamada AJAX para o endpoint no backend
-  $.ajax({
-    url: '/api/getResIA',
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://chatgpt-best-price.p.rapidapi.com/v1/chat/completions',
     method: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({ input: input_url })
-  }).done(function (response) {
-    // Manipula a resposta recebida do backend
-    texto = "🤖 <div class='tooltip'> ChatGPT:&nbsp;</div>" + response.message;
+    headers: {
+      'x-rapidapi-key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'x-rapidapi-host': 'chatgpt-best-price.p.rapidapi.com',
+      'Content-Type': 'application/json'
+    },
+    processData: false,
+    data: '{"model":"gpt-3.5-turbo","messages":[{"role":"user","content":"' + input_url + '"}]}'
+  };
+  
+  try{
+
+  $.ajax(settings).done(function (response) {
+    texto = "🤖 <div class='tooltip'> ChatGPT:&nbsp;</div>" + response.choices[0].message.content;
     Digitar(texto);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao se conectar com o Chat GPT.');
   });
+      
+}catch{
+  texto = "Houve um erro ao se conectar com a API do Chat GPT."
+  Digitar(texto);
 }
 
+}
 
 function resArquivoCachePass(x){
   input_url = x.split('wpp ').join('');
@@ -528,32 +556,52 @@ function resQR(x){ //dando erro
 
     }
 
-    function resShort(x) {
-      input_url = x.split('short ').join('');
-    
-      var div = document.createElement("div");
-      div.classList.add('padrao');
-      div.innerHTML = 'Encurtando URL...'
-      document.getElementById("padrao2").append(div);
-    
-      // Faz a chamada AJAX para o endpoint no backend
-      $.ajax({
-        url: '/api/getShort',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ url: input_url })
-      }).done(function (response) {
-        // Manipula a resposta recebida do backend
-        const shortenedUrl = response.result_url;
-        const texto = `Sua URL foi encurtada para: ${shortenedUrl} e já está disponível no seu CTRL+V`;
-        Digitar(texto);
-        navigator.clipboard.writeText(shortenedUrl);
-      }).fail(function (error) {
-        console.error('Erro ao enviar requisição ao backend:', error);
-        Digitar('Houve um erro ao encurtar a URL.');
-      });
+function resShort(x){
+
+  input_url = x.split('short ').join('');
+
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = 'Encurtando URL...'
+  document.getElementById("padrao2").append(div);
+
+
+  if(input_url.startsWith("http")){
+
+  }
+  else{
+    input_url = ("https://"+input_url)
+  }
+
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://url-shortener-service.p.rapidapi.com/shorten',
+    method: 'POST',
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'url-shortener-service.p.rapidapi.com'
+    },
+    data: {
+      url: input_url
     }
-    
+  };
+
+
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+    texto = 'Sua URL foi encurtada para: ' + response['result_url'] + ' e já está disponível no seu CTRL+V'
+    Digitar(texto)
+
+    navigator.clipboard.writeText(response['result_url'] );
+
+  });
+
+
+
+
+}
 
 function resRead(x){
 
@@ -573,173 +621,186 @@ function resRead(x){
 
 }
 
-function resMp4TikTok(url) {
+function resMp4Youtube(video_id){
   var div = document.createElement("div");
-  div.classList.add('padrao');
-  div.innerHTML = 'myterminal > Iniciando o download...';
+div.classList.add('padrao');
+console.log(video_id);
 
-  // Faz a chamada AJAX para o endpoint no backend
-  $.ajax({
-    url: '/api/getMp4Tiktok',
-    method: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({ url })
-  }).done(function (response) {
-    // Manipula a resposta recebida do backend
-    window.open(response.data.play, '_blank');
-
-    div.innerHTML = 'myterminal > Download iniciado em nova guia.';
-    document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o vídeo do TikTok.');
-  });
+const settings = {
+	async: true,
+	crossDomain: true,
+	url: 'https://ytstream-download-youtube-videos.p.rapidapi.com/dl?id='+video_id, //UxxajLWwzqY',
+	method: 'GET',
+	headers: {
+		'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+		'X-RapidAPI-Host': 'ytstream-download-youtube-videos.p.rapidapi.com'
+	}
+};
+  
+try{
+$.ajax(settings).done(function (response) {
+	console.log(response.data);
+  console.log(response.formats[1].url)
+  window.open(response.formats[1].url,'_blank');
+});
+}
+catch(err){
+  console.log(err);
 }
 
 
-function resMp4Youtube(video_id) {
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  console.log(video_id);
+div.innerHTML = 'myterminal > Download inicado em nova guia.'
+document.getElementById("padrao2").append(div);
 
-  // Faz a chamada AJAX para o endpoint no backend
-  $.ajax({
-    url: '/api/getMp4Yt',
-    method: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({ video_id })
-  }).done(function (response) {
-    // Manipula a resposta recebida do backend
-    console.log(response.data);
-    console.log(response.formats[1].url)
-    window.open(response.formats[1].url, '_blank');
-
-    div.innerHTML = 'myterminal > Download iniciado em nova guia.';
-    document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o vídeo do YouTube.');
-  });
 }
 
+function resMp4Instagram(ulrInstagram, type){
 
-function resMp4Instagram(urlInstagram, type) {
-  if (urlInstagram.includes("mp4 ")) {
-    urlInstagram = urlInstagram.split('mp4 ').join('');
+  if(ulrInstagram.includes("mp4 ")){
+    ulrInstagram = ulrInstagram.split('mp4 ').join('');
   }
 
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'myterminal > Iniciando o download...';
 
-  // Faz a chamada AJAX para o endpoint no backend
-  $.ajax({
-    url: '/api/getMp4Insta',
-    method: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({ url: urlInstagram, type })
-  }).done(function (response) {
-    console.log(response);
-    if (response === "") {
-      div.innerHTML = 'myterminal > Erro! Não temos acesso a conteúdos de contas privadas.';
-    } else {
-      window.open(response.video, '_blank');
-      div.innerHTML = 'myterminal > Download iniciado em nova guia.';
+  div.innerHTML = 'myterminal > Iniciando o download...'
+
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://instagram-media-downloader.p.rapidapi.com/rapid/'+ type +'.php?url=' + ulrInstagram,
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'instagram-media-downloader.p.rapidapi.com'
     }
-    document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o vídeo do Instagram.');
-    document.getElementById("padrao2").append(div);
+  };
+  try{
+  $.ajax(settings).done(function (response) {
+    console.log(response);
+    if(response == ""){
+      div.innerHTML = 'myterminal > Erro! Não temos acesso a conteúdos de contas privadas.';
+    }
+    else{
+      window.open(response.video,'_blank');
+      div.innerHTML = 'myterminal > Download inicado em nova guia.';
+    }
+
   });
 }
+catch{
+  console.log(err);
+}
 
-function resMp4Twitter(urlTwitter) {
-  if (urlTwitter.includes("mp4 ")) {
-    urlTwitter = urlTwitter.split('mp4 ').join('');
+document.getElementById("padrao2").append(div);
+}
+
+function resMp4Twitter(ulrInstagram){
+
+  if(ulrInstagram.includes("mp4 ")){
+    ulrInstagram = ulrInstagram.split('mp4 ').join('');
   }
 
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'myterminal > Iniciando o download...';
 
-  // Faz a chamada AJAX para o endpoint no backend
-  $.ajax({
-    url: '/api/getMp4Twitter',
-    method: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({ url: urlTwitter })
-  }).done(function (response) {
+  div.innerHTML = 'myterminal > Iniciando o download...'
+
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://twitter-downloader-download-twitter-videos-gifs-and-images.p.rapidapi.com/status?url=' + ulrInstagram,
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'twitter-downloader-download-twitter-videos-gifs-and-images.p.rapidapi.com'
+    }
+  };
+  try{
+  $.ajax(settings).done(function (response) {
     console.log(response.media.video.videoVariants[0].url);
-    window.open(response.media.video.videoVariants[0].url, '_blank');
-    div.innerHTML = 'myterminal > Download iniciado em nova guia.';
-    document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o vídeo do Twitter.');
-    document.getElementById("padrao2").append(div);
+    window.open(response.media.video.videoVariants[0].url,'_blank');
+    div.innerHTML = 'myterminal > Download inicado em nova guia.';
   });
 }
+catch{
+  console.log(err);
+}
 
+document.getElementById("padrao2").append(div);
+}
 
-function resMp4Outros(url) {
-  if (url.includes("mp4 ")) {
-    url = url.split('mp4 ').join('');
+function resMp4Outros(ulrInstagram){
+
+  if(ulrInstagram.includes("mp4 ")){
+    ulrInstagram = ulrInstagram.split('mp4 ').join('');
   }
 
-  if (url.includes("web.")) {
-    url = url.split('web.').join('');
+  if(ulrInstagram.includes("web.")){
+    ulrInstagram = ulrInstagram.split('web.').join('');
   }
 
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'myterminal > Iniciando o download...';
 
-  // Faz a chamada AJAX para o endpoint no backend
-  $.ajax({
-    url: '/api/getMp4Outros',
+  div.innerHTML = 'myterminal > Iniciando o download...'
+
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://all-media-downloader.p.rapidapi.com/download',
     method: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({ url: url })
-  }).done(function (response) {
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'all-media-downloader.p.rapidapi.com'
+    },
+    data: {
+      url: ulrInstagram
+    }
+  };
+
+  try{
+  $.ajax(settings).done(function (response) {
     console.log(response);
     console.log(response['720P'].url);
-    window.open(response['720P'].url, '_blank');
-    div.innerHTML = 'myterminal > Download iniciado em nova guia.';
-    document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o vídeo de outros sites.');
-    document.getElementById("padrao2").append(div);
+    window.open(response['720P'].url,'_blank');
+    div.innerHTML = 'myterminal > Download inicado em nova guia.';
   });
 }
+catch{
+  console.log(err);
+}
 
+document.getElementById("padrao2").append(div);
+}
 
-function resMp3(video_id) {
+  function resMp3(video_id){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  
-  div.innerHTML = 'myterminal > Iniciando o download...';
-  
-  // Faz a chamada AJAX para o endpoint no backend
-  $.ajax({
-    url: '/api/getMp3Yt',
-    method: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({ video_id: video_id })
-  }).done(function (response) {
-    console.log(response);
-    console.log(response.link[0]);
-    window.open(response.link, '_blank');
-    div.innerHTML = 'myterminal > Download iniciado em nova guia.';
-    document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o áudio.');
-    document.getElementById("padrao2").append(div);
-  });
-}
 
+  const settings = {
+    async: true,
+    crossDomain: true,
+    url: 'https://youtube-mp36.p.rapidapi.com/dl?id='+video_id,
+    method: 'GET',
+    headers: {
+      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
+      'X-RapidAPI-Host': 'youtube-mp36.p.rapidapi.com'
+    }
+  };
+
+  $.ajax(settings).done(function (response) {
+    div.innerHTML = 'myterminal > Download inicado em nova guia.'
+    console.log(response);
+    console.log(response.link[0])
+    window.open(response.link,'_blank');
+  });
+
+
+  document.getElementById("padrao2").append(div);
+
+  }
 
   function removerParteDaString(texto, parteASerRemovida) {
     // Verificar se a parteASerRemovida está presente na string
@@ -892,11 +953,7 @@ function validateForm() {
           pegarURL(x)
           resMp4Twitter(newurlInstagram)
         }
-        else if(x.includes("tiktok.")){
-          pegarURL(x);
-          resMp4TikTok(x);
-        }
-        else if (x.includes("facebook") || x.includes("reddit")){
+        else if (x.includes("tikTok") || x.includes("facebook") || x.includes("reddit")){
           pegarURL(x)
           resMp4Outros(newurlInstagram)
         }
