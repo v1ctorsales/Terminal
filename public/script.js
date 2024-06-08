@@ -536,17 +536,19 @@ function resQR(x){ //dando erro
       div.innerHTML = 'Encurtando URL...'
       document.getElementById("padrao2").append(div);
     
-      // Faz a chamada AJAX para o endpoint no backend
+      // Ajuste na chamada AJAX para enviar os dados corretamente
       $.ajax({
-        url: '/api/getShort',
+        url: '/api/getShort', // Rota do seu backend
         method: 'POST',
         contentType: 'application/json',
+        // Corpo da requisição deve ser uma string JSON
         data: JSON.stringify({ url: input_url })
       }).done(function (response) {
         // Manipula a resposta recebida do backend
         const shortenedUrl = response.result_url;
+        console.log("URL encurtada:", shortenedUrl);
         const texto = `Sua URL foi encurtada para: ${shortenedUrl} e já está disponível no seu CTRL+V`;
-        Digitar(texto);
+        Digitar(texto); 
         navigator.clipboard.writeText(shortenedUrl);
       }).fail(function (error) {
         console.error('Erro ao enviar requisição ao backend:', error);
@@ -601,6 +603,7 @@ function resMp4Youtube(video_id) {
   var div = document.createElement("div");
   div.classList.add('padrao');
   console.log(video_id);
+  div.innerHTML = 'myterminal > Iniciando o download...';
 
   // Faz a chamada AJAX para o endpoint no backend
   $.ajax({

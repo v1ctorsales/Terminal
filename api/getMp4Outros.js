@@ -1,9 +1,8 @@
-const fetch = require('node-fetch');
-
 module.exports = async (req, res) => {
   const { url } = req.body;
 
   try {
+    
     const response = await fetch('https://all-media-downloader.p.rapidapi.com/download', {
       method: 'POST',
       headers: {
