@@ -245,52 +245,36 @@ function resFonte(newFontesize){
 }
 
 
-function resIpLoc(_newip){
-
+function resIpLoc(_newip) {
   var div = document.createElement("div");
   div.classList.add('padrao');
   div.innerHTML = "Carregando informações sobre o IP..."
   document.getElementById("padrao2").append(div);
 
-  const settings = {
-    async: true,
-    crossDomain: true,
-    url: 'https://ip-reputation-geoip-and-detect-vpn.p.rapidapi.com/?ip='+_newip,
+  $.ajax({
+    url: `/.netlify/functions/getIpInfo?_newip=${_newip}`,
     method: 'GET',
-    headers: {
-      'X-RapidAPI-Key': '0647bc5201msh84a9358b48d00eep163485jsne7ecf062e49f',
-      'X-RapidAPI-Host': 'ip-reputation-geoip-and-detect-vpn.p.rapidapi.com'
+  }).done(function (response) {
+    let stringrede = JSON.stringify(response.cidr);
+    console.log(stringrede);
+    if (!(stringrede).includes("null")) {
+      try {
+        var texto = 'ip : ' + response.ip + '<br>' +
+          'rede : ' + response.cidr + '<br>' +
+          'continente : ' + response.continent + '<br>' +
+          'país : ' + response.country + '<br>' +
+          'região : ' + response.region + '<br>' +
+          'cidade : ' + response.city + '<br>' +
+          'vpn/proxy : ' + response.is_vpn_proxy + '<br>';
+      } catch {
+        console.log('Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.');
+        texto = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.';
+      }
+    } else {
+      texto = '<i class="fa-solid fa-triangle-exclamation"></i> IP inválido.';
     }
-  };
-  
-  $.ajax(settings).done(function (response) {
-    let stringrede = JSON.stringify(response.cidr)
-    console.log(stringrede)
-    if(!(stringrede).includes("null")){
-        try{
-        texto = 'ip : ' + response.ip + '<br>'+
-        'rede : ' + response.cidr + '<br>'+
-        'continente : '+ response.continent + '<br>'+
-        'país : ' + response.country + '<br>'+
-        'região : ' + response.region + '<br>'+
-        'cidade : ' + response.city + '<br>' +
-        'vpn/proxy : ' + response.is_vpn_proxy + '<br>'
-        }
-    catch{
-      console.log('Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.')
-      texto = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.'
-      Digitar(texto);
-    }
-  }
-  else{
-    div.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> IP inválido.'
-    Digitar(texto);
-
-  }
-     Digitar(texto);
-});
-
-
+    div.innerHTML = texto;
+  });
 }
 
 function resNetInfo(){
