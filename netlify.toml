@@ -1,9 +1,0 @@
-[build]
-  publish = "public"  # Diretório onde estão os arquivos estáticos (HTML, CSS, JS, etc.)
-  functions = "netlify/functions"  # Diretório onde estão as funções serverless
-
-# Adicionalmente, se estiver usando ferramentas de build, especifique o comando de build
-[build]
-  publish = "public"
-  functions = "netlify/functions"
-  command = "npm run build"  # Se você tiver um comando de build, adicione-o aqui
