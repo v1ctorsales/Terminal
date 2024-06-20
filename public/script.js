@@ -347,9 +347,9 @@ function duvidaMp3(){
   div.classList.add('padrao');
   document.getElementById("padrao2").append(div);
   texto = 'Lista de comandos disponíveis junto ao mp3:'  +
-  '<br/>mp3 + [URL DO YOUTUBE]' +
+  '<br/>mp3 + [URL]' +
   '<br/>ex: mp3 https://youtu.be/3ZnHr62W72Q' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar áudios de vídeos do YouTube. ' 
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar áudios de vídeos do YouTube ou Spotify. ' 
   Digitar(texto);
 }
 
@@ -749,6 +749,47 @@ function resMp3(video_id) {
   });
 }
 
+function resMp3Spotify(x) {
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  
+  div.innerHTML = 'myterminal > Iniciando o download...';
+  document.getElementById("padrao2").append(div);
+  
+  var input_url = x.trim();
+  console.log('URL enviada:', input_url);
+
+  if (input_url.startsWith('mp3 ')) {
+      input_url = input_url.substring(4);
+  }
+
+  if (input_url.includes("/intl-pt/")) {
+      input_url = input_url.replace("/intl-pt/", "/");
+  }
+
+  $.ajax({
+      url: '/api/getMp3Spot',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({ newinput_url: input_url })
+  }).done(function (response) {
+
+      if (response.result) {
+        console.log(response.result)
+          window.open(response.result, '_blank');
+          div.innerHTML = 'myterminal > Download iniciado em nova guia.';
+      } else {
+          div.innerHTML = 'myterminal > Não foi possível iniciar o download.';
+      }
+      document.getElementById("padrao2").append(div);
+  }).fail(function (error) {
+      console.error('Erro ao enviar requisição ao backend:', error);
+      div.innerHTML = 'Houve um erro ao baixar o áudio.';
+      document.getElementById("padrao2").append(div);
+  });
+}
+
+
 
   function removerParteDaString(texto, parteASerRemovida) {
     // Verificar se a parteASerRemovida está presente na string
@@ -928,10 +969,16 @@ function validateForm() {
     else if (x.includes("mp3 ")) {
       try{
         divPadrao(x);
-        pegarID(x);
-        resMp3(newurl)
+        if(x.includes("youtu.be/") || x.includes("youtube.com")){
+          pegarID(x);
+          resMp3(newurl)
+        }
+        else if(x.includes("spotify.com")){
+          resMp3Spotify(x)
+        }
+
       }
-      catch{
+      catch{ 
 
       }
       autoScrollDown();
