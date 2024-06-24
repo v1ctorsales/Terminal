@@ -90,7 +90,7 @@ function resHelp() {
       '<br/>help <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acho que você já sabe o quê esse comando faz</div>' +
       '<br/>ia <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicie uma conversa com o ChatGPT</div>' +
       '<br/>iploc <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Localize um IP</div>' +
-      '<br/>mp3 <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baixe um áudio do Youtube</div>' +
+      '<br/>mp3 <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baixe um áudio do Youtube ou Spotify</div>' +
       '<br/>mp4 <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baixe um vídeo de (quase) qualquer site</div>' +
       '<br/>qr <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Crie um QRcode</div>' +
       '<br/>read <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leia matérias sem pagar a mensalidade do site</div>' +
@@ -349,7 +349,7 @@ function duvidaMp3(){
   texto = 'Lista de comandos disponíveis junto ao mp3:'  +
   '<br/>mp3 + [URL]' +
   '<br/>ex: mp3 https://youtu.be/3ZnHr62W72Q' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar áudios de vídeos do YouTube ou Spotify. ' 
+  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar áudios do YouTube ou Spotify.' 
   Digitar(texto);
 }
 
@@ -401,7 +401,7 @@ function duvidaRead(){
   var div = document.createElement("div");
   div.classList.add('padrao');
   document.getElementById("padrao2").append(div);
-  fonte = 'Lista de comandos disponíveis junto ao read:'  +
+  texto = 'Lista de comandos disponíveis junto ao read:'  +
   '<br/>read + [URL]' +
   '<br/>ex: read https://www.estadao.com.br/economia/acordo-itaipu-conta-luz-obras/' +
   '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para visualizar sites de notícias passando pelo paywall. ';

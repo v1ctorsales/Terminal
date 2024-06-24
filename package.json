@@ -12,6 +12,7 @@
   "dependencies": {
     "esm": "^3.2.25",
     "form-data": "^4.0.0",
-    "node-fetch": "^2.7.0"
+    "node-fetch": "^2.7.0",
+    "request": "^2.88.2"
   }
 }
