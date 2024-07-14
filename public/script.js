@@ -638,7 +638,8 @@ function resMp4Instagram(urlInstagram, type) {
   div.innerHTML = 'myterminal > Iniciando o download...';
   document.getElementById("padrao2").append(div);
 
-  // Faz a chamada AJAX para o endpoint no backend
+  console.log("type", type)
+
   $.ajax({
     url: '/api/getMp4Insta',
     method: 'POST',
@@ -648,7 +649,14 @@ function resMp4Instagram(urlInstagram, type) {
     console.log(response);
     if (response === "") {
       div.innerHTML = 'myterminal > Erro! Não temos acesso a conteúdos de contas privadas.';
-    } else {
+    }
+    if (type === "highlights") {
+      for (let i = 0; i < response.length; i++) {
+              window.open(response[i], '_blank');
+      }
+      div.innerHTML = 'myterminal > Download iniciado em novas guias.';
+  }
+    else {
       window.open(response.video, '_blank');
       div.innerHTML = 'myterminal > Download iniciado em nova guia.';
     }
@@ -918,6 +926,12 @@ function validateForm() {
         {
           pegarID(x); 
           resMp4Youtube(newurl)
+        }
+        else if (x.includes("instagram") && x.includes("/highlights/"))
+        {
+          pegarURL(x)
+          type = 'highlights'
+          resMp4Instagram(newurlInstagram, type)
         }
         else if (x.includes("instagram") && x.includes("/stories/"))
         {
