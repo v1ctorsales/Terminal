@@ -618,7 +618,6 @@ function resMp4Youtube(video_id) {
     console.log(response.data);
     console.log(response.adaptiveFormats[0].url)
     window.open(response.adaptiveFormats[0].url,'_blank');
-
     div.innerHTML = 'myterminal > Download iniciado em nova guia.';
     document.getElementById("padrao2").append(div);
   }).fail(function (error) {
