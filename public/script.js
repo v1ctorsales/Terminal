@@ -615,9 +615,9 @@ function resMp4Youtube(video_id) {
     data: JSON.stringify({ video_id })
   }).done(function (response) {
     // Manipula a resposta recebida do backend
-    console.log(response.data);
-    console.log(response.adaptiveFormats[0].url)
-    window.open(response.adaptiveFormats[0].url,'_blank');
+    console.log("DATA " , response);
+    console.log(response.formats[0].url)
+    window.open(response.formats[0].url,'_blank');
     div.innerHTML = 'myterminal > Download iniciado em nova guia.';
     document.getElementById("padrao2").append(div);
   }).fail(function (error) {
