@@ -639,9 +639,9 @@ const settings = {
   
 try{
 $.ajax(settings).done(function (response) {
-	console.log(response.data);
-  console.log(response.formats[1].url)
-  window.open(response.formats[1].url,'_blank');
+	console.log("RESPONSE1", response.data);
+  console.log(response.adaptiveFormats[0].url)
+  window.open(response.adaptiveFormats[0].url,'_blank');
 });
 }
 catch(err){
