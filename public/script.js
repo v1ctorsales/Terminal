@@ -757,44 +757,59 @@ function resMp3(video_id) {
 }
 
 function resMp3Spotify(x) {
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  
-  div.innerHTML = 'myterminal > Iniciando o download...';
-  document.getElementById("padrao2").append(div);
-  
-  var input_url = x.trim();
-  console.log('URL enviada:', input_url);
+    var div = document.createElement("div");
+    div.classList.add('padrao');
 
-  if (input_url.startsWith('mp3 ')) {
-      input_url = input_url.substring(4);
-  }
+    div.innerHTML = 'myterminal > Iniciando o download...';
+    document.getElementById("padrao2").append(div);
 
-  if (input_url.includes("/intl-pt/")) {
-      input_url = input_url.replace("/intl-pt/", "/");
-  }
+    var input_url = x.trim();
+    console.log('URL enviada:', input_url);
 
-  $.ajax({
-      url: '/api/getMp3Spot',
-      method: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify({ newinput_url: input_url })
-  }).done(function (response) {
+    if (input_url.startsWith('mp3 ')) {
+        input_url = input_url.substring(4);
+    }
 
-      if (response.result) {
-        console.log(response.result)
-          window.open(response.result, '_blank');
-          div.innerHTML = 'myterminal > Download iniciado em nova guia.';
-      } else {
-          div.innerHTML = 'myterminal > Não foi possível iniciar o download.';
-      }
-      document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-      console.error('Erro ao enviar requisição ao backend:', error);
-      div.innerHTML = 'Houve um erro ao baixar o áudio.';
-      document.getElementById("padrao2").append(div);
-  });
+    if (input_url.includes("/intl-pt/")) {
+        input_url = input_url.replace("/intl-pt/", "/");
+    }
+    // Requisição Ajax para obter o link de download
+    $.ajax({
+        url: '/api/getMp3Spot',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ newinput_url: input_url })
+    }).done(function (response) {
+      console.log("response", response)
+        if (response) {
+            const link = response.data.downloadLink;
+            console.log('Link recebido:', link);
+
+                // 🟡 Abrir nova aba imediatamente (evita bloqueio do navegador)
+    const novaAba = window.open('', '_blank');
+    if (!novaAba) {
+        div.innerHTML = 'myterminal > Falha ao abrir nova aba. Desative o bloqueador de pop-ups.';
+        document.getElementById("padrao2").append(div);
+        return;
+    }
+
+
+            novaAba.location.href = link; // 🔁 Redireciona a nova aba para o link
+            div.innerHTML = 'myterminal > Download iniciado em nova guia.';
+        } else {
+            novaAba.close(); // Fecha a aba se falhar
+            div.innerHTML = 'myterminal > Não foi possível iniciar o download.';
+        }
+
+        document.getElementById("padrao2").append(div);
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.error('Erro completo:', jqXHR, textStatus, errorThrown);
+        novaAba.close();
+        div.innerHTML = 'Houve um erro ao baixar o áudio.';
+        document.getElementById("padrao2").append(div);
+    });
 }
+
 
 
 
