@@ -53,6 +53,11 @@ a:hover{
     text-decoration: none;
 }   
 
+.information.help-table { line-height: 1.6; }
+.information.help-table .help-row { white-space: nowrap; }
+.information.help-table .help-cmd { font-weight: 600; } /* mantém cor/estilo do comando */
+
+
 .welcome{
     margin-bottom: 1rem;
     color: #ffb86c;
@@ -132,3 +137,4 @@ a:hover{
         text-align: left;
     }
   }
+  

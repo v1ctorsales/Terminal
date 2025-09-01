@@ -1,225 +1,524 @@
-var historico = []
+/********** I18N **********/
+let currentLang = (localStorage.getItem('lang') || 'ptbr').toLowerCase();
+
+const i18n = {
+  ptbr: {
+    labels: {
+      prompt: "myterminal >",
+    },
+    info: {
+      helpTitle: "Lista de todos os comandos disponíveis :",
+      langHelp: "Estes comandos são utilizados para trocar o idioma dos textos no terminal.",
+      colorHelpTitle: "Lista de comandos disponíveis junto ao color:",
+      fontChanged: (n)=>`Tamanho da fonte alterado para: ${n}`,
+      fontTooBig: (n)=>`Você escolheu um tamanho muito grande, a fonte foi alterada para o tamanho: ${n}`,
+      fontTooSmall: (n)=>`Você escolheu um tamanho muito pequeno, a fonte foi alterada para o tamanho: ${n}`,
+      pageOpened: "Página aberta em nova aba. Boa leitura!",
+      sendingToGPT: "Enviando sua mensagem aos servidores do Chat GPT...",
+      startingDownload: "Iniciando o download...",
+      downloadStarted: "Download iniciado em nova guia.",
+      downloadsStarted: "Download iniciado em novas guias.",
+      makingQR: "Criando QR Code...",
+      invalidURL: "URL inválida",
+      qrOk: (u)=>`QR Code de ${u} gerado com sucesso!`,
+      shortingURL: "Encurtando URL...",
+      shortDone: (u)=>`Sua URL foi encurtada para: ${u} e já está disponível no seu CTRL+V`,
+      ipLoading: "Carregando informações sobre o IP...",
+      msgOpened: "Solicitação de mensagem aberta em nova aba.",
+      cachePass: "Download de CachePass iniciado em nova aba.",
+      about: "Mais informações sobre este sistema:",
+      aboutBody: "Este Terminal foi desenvolvido por Victor Sales e tem o intuito de reunir ferramentas úteis para o desenvolvedor. Quem sabe você não encontra algo útil pra você também? O aplicativo foi desenvolvido com HTML, CSS e JavaScript",
+      langSetOk: (code)=>`Idioma alterado para ${code.toUpperCase()}.`,
+      ipLabel: (k,v)=>`${k} : ${v}`,
+    },
+    errors: {
+      unknownCommand: "COMANDO NÃO RECONHECIDO PELO SISTEMA!",
+      ipError: "Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.",
+      ipInvalid: "IP inválido.",
+      tiktokErr: "Houve um erro ao baixar o vídeo do TikTok.",
+      ytErr: "Houve um erro ao baixar o vídeo do YouTube.",
+      instaErr: "Houve um erro ao baixar o vídeo do Instagram.",
+      twitterErr: "Houve um erro ao baixar o vídeo do Twitter.",
+      otherSitesErr: "Houve um erro ao baixar o vídeo de outros sites.",
+      audioErr: "Houve um erro ao baixar o áudio.",
+      shortErr: "Houve um erro ao encurtar a URL.",
+      gptErr: "Houve um erro ao se conectar com o Chat GPT.",
+      popupBlocked: "Falha ao abrir nova aba. Desative o bloqueador de pop-ups.",
+      privateInsta: "Erro! Não temos acesso a conteúdos de contas privadas.",
+      downloadFail: "Não foi possível iniciar o download.",
+      langUnknown: (code)=>`Idioma '${code}' não suportado. Use: ptbr | eng`,
+    },
+    help: {
+      items: [
+        ["clear", "Limpe o chat"],
+        ["color", "Mude a cor do texto"],
+        ["fonte", "Mude o tamanho da fonte"],
+        ["help", "Acho que você já sabe o quê esse comando faz"],
+        ["ia", "Inicie uma conversa com o ChatGPT"],
+        ["iploc", "Localize um IP"],
+        ["lang", "Mude o idioma"],
+        ["mp3", "Baixe um áudio do Youtube ou Spotify"],
+        ["mp4", "Baixe um vídeo de (quase) qualquer site"],
+        ["qr", "Crie um QRcode"],
+        ["short", "Encurte URLs"],
+        ["sobre", "Informações sobre o sistema"],
+      ]
+    },
+    guides: {
+      lang: ["lang ptbr", "lang eng"],
+      color: ['color blue','color green','color pink','color red','color white','color yellow'],
+      mp4: ['mp4 + [URL]', 'ex: mp4 https://youtu.be/3ZnHr62W72Q', 'Este comando é utilizado para baixar vídeos do YouTube, Instagram, Facebook, Twitter, Tiktok e Reddit em 720p.'],
+      mp3: ['mp3 + [URL]', 'ex: mp3 https://youtu.be/3ZnHr62W72Q', 'Este comando é utilizado para baixar áudios do YouTube ou Spotify.'],
+      qr:  ['qr + [URL]', 'ex: qr google.com', 'Este comando é utilizado para criar um QR Code com destino à uma URL.'],
+      iploc: ['iploc + [ipv4]', 'ex: iploc 8.8.8.8', 'Este comando é utilizado para obter informações sobre um Ipv4'],
+      short:['short + [URL]', 'ex: short google.com', 'Este comando é utilizado para encurtar URLs.'],
+      ia:  ['ia + [Texto]', 'ex: ia Por quê o Cruzeiro é o melhor time de Minas Gerais?', 'Este comando é utilizado para gerar uma conversa com o chat GPT.'],
+      read:['read + [URL]', 'ex: read https://www.estadao.com.br/...', 'Este comando é utilizado para visualizar sites de notícias passando pelo paywall.'],
+      fonte:['fonte + [Número da fonte]', 'ex: fonte 18', 'Este comando é utilizado para mudar o tamanho da fonte, o valor padrão é 16.'],
+      wpp: ['wpp + [Número de Telefone]', 'ex: wpp 553171239966', 'Este comando é utilizado para enviar mensagens via whatsapp.'],
+      arquivo:['arquivo + [Nome do Arquivo]', 'ex: arquivo cachepass', 'Arquivos disponíveis: CachePass', 'Este comando é utilizado para baixar arquivos.']
+    }
+  },
+
+  eng: {
+    labels: {
+      prompt: "myterminal >",
+    },
+    info: {
+      helpTitle: "List of all available commands:",
+      langHelp: "These commands are used to change the terminal language.",
+      colorHelpTitle: "Available commands for color:",
+      fontChanged: (n)=>`Font size changed to: ${n}`,
+      fontTooBig: (n)=>`You chose a very large size, font set to: ${n}`,
+      fontTooSmall: (n)=>`You chose a very small size, font set to: ${n}`,
+      pageOpened: "Page opened in a new tab. Enjoy!",
+      sendingToGPT: "Sending your message to ChatGPT servers...",
+      startingDownload: "Starting download...",
+      downloadStarted: "Download started in a new tab.",
+      downloadsStarted: "Downloads started in new tabs.",
+      makingQR: "Creating QR Code...",
+      invalidURL: "Invalid URL",
+      qrOk: (u)=>`QR Code for ${u} generated successfully!`,
+      shortingURL: "Shortening URL...",
+      shortDone: (u)=>`Your URL was shortened to: ${u} and is on your clipboard`,
+      ipLoading: "Loading IP information...",
+      msgOpened: "Message request opened in a new tab.",
+      cachePass: "CachePass download started in a new tab.",
+      about: "More information about this system:",
+      aboutBody: "This Terminal was developed by Victor Sales to gather useful tools for developers. Built with HTML, CSS and JavaScript.",
+      langSetOk: (code)=>`Language changed to ${code.toUpperCase()}.`,
+      ipLabel: (k,v)=>`${k} : ${v}`,
+    },
+    errors: {
+      unknownCommand: "COMMAND NOT RECOGNIZED BY THE SYSTEM!",
+      ipError: "Error getting IP info. Check your network privacy settings.",
+      ipInvalid: "Invalid IP.",
+      tiktokErr: "An error occurred while downloading the TikTok video.",
+      ytErr: "An error occurred while downloading the YouTube video.",
+      instaErr: "An error occurred while downloading the Instagram video.",
+      twitterErr: "An error occurred while downloading the Twitter video.",
+      otherSitesErr: "An error occurred while downloading the video.",
+      audioErr: "An error occurred while downloading the audio.",
+      shortErr: "An error occurred while shortening the URL.",
+      gptErr: "An error occurred connecting to Chat GPT.",
+      popupBlocked: "Failed to open a new tab. Disable your pop-up blocker.",
+      privateInsta: "Error! We don’t have access to private accounts.",
+      downloadFail: "Could not start the download.",
+      langUnknown: (code)=>`Unsupported language '${code}'. Use: ptbr | eng`,
+    },
+    help: {
+      items: [
+        ["clear", "Clear the chat"],
+        ["color", "Change text color"],
+        ["font", "Change font size"],
+        ["help", "You probably know what this does"],
+        ["ai", "Start a conversation with ChatGPT"],
+        ["iploc", "Locate an IP"],
+        ["lang", "Change language"],
+        ["mp3", "Download audio from YouTube or Spotify"],
+        ["mp4", "Download video from (almost) any site"],
+        ["qr", "Create a QR code"],
+        ["short", "Shorten URLs"],
+        ["about", "System information"],
+      ]
+    },
+    guides: {
+      lang: ["lang ptbr", "lang eng"],
+      color: ['color blue','color green','color pink','color red','color white','color yellow'],
+      mp4: ['mp4 + [URL]', 'e.g.: mp4 https://youtu.be/3ZnHr62W72Q', 'Downloads videos from YouTube, Instagram, Facebook, Twitter, Tiktok and Reddit in 720p.'],
+      mp3: ['mp3 + [URL]', 'e.g.: mp3 https://youtu.be/3ZnHr62W72Q', 'Downloads audio from YouTube or Spotify.'],
+      qr:  ['qr + [URL]', 'e.g.: qr google.com', 'Creates a QR Code pointing to a URL.'],
+      iploc: ['iploc + [ipv4]', 'e.g.: iploc 8.8.8.8', 'Gets information about an IPv4 address'],
+      short:['short + [URL]', 'e.g.: short google.com', 'Shortens URLs.'],
+      ia:  ['ai + [Text]', 'e.g.: ai Why is Cruzeiro the best team in Minas?', 'Starts a conversation with ChatGPT.'],
+      read:['read + [URL]', 'e.g.: read https://www.estadao.com.br/...', 'Bypasses paywalls for news pages.'],
+      fonte:['font + [Font size number]', 'e.g.: font 18', 'Changes font size, default is 16.'],
+      wpp: ['wpp + [Phone Number]', 'e.g.: wpp 553171239966', 'Opens WhatsApp message.'],
+      arquivo:['arquivo + [File name]', 'e.g.: arquivo cachepass', 'Available: CachePass', 'Downloads files.']
+    }
+  }
+};
+
+function t(path, ...args){
+  const segs = path.split('.');
+  let node = i18n[currentLang];
+  for(const s of segs){ node = (node||{})[s]; }
+  if (typeof node === 'function') return node(...args);
+  return node ?? path;
+}
+
+function setLanguage(code){
+  // 1) limpa a tela como o comando clear
+  resClear();
+
+  // 2) normaliza código
+  const map = { pt: 'ptbr', ptbr: 'ptbr', br: 'ptbr', en: 'eng', eng: 'eng', english: 'eng' };
+  const norm = map[(code||'').toLowerCase()];
+
+  // 3) cria um novo bloco após limpar
+  const div = document.createElement("div");
+  div.classList.add('padrao');
+  document.getElementById("padrao2").append(div);
+
+  if(!norm){
+    // mensagem no idioma atual
+    Digitar(t('errors.langUnknown', code));
+    return;
+  }
+
+  // 4) aplica idioma e confirma
+  currentLang = norm;
+  localStorage.setItem('lang', currentLang);
+  Digitar(t('info.langSetOk', currentLang));
+
+  // (opcional) já mostra o help no novo idioma:
+  // resHelp();
+}
+
+
+/********** ESTADO E VARS **********/
+var historico = [];
 var aumento = 0;
-var darkcolor = "rgb(50, 128, 57)"
+var darkcolor = "rgb(50, 128, 57)";
 var controladorDivPadrao = 0;
+let newurl, newurlInstagram, newip, type;
 
-
+/********** FUNÇÕES AUX **********/
 function Armazenar (x){
-  historico.push(x)
-  console.log(historico[historico.length - 1])
+  historico.push(x);
+  console.log(historico[historico.length - 1]);
 }
 
 function SetaCima() {
-    aumento++;
-    if(historico[historico.length - aumento] != undefined){
+  aumento++;
+  if(historico[historico.length - aumento] != undefined){
     document.getElementById("inputform").value = historico[historico.length - aumento];
-    }
-    else{
-
-    }
-    if(aumento > historico.length -1){
-      aumento = 0;
-    }
+  }
+  if(aumento > historico.length -1){
+    aumento = 0;
+  }
 }
 
 function SetaBaixo(){
   aumento--;
   if(historico[historico.length - aumento] != undefined){
-  document.getElementById("inputform").value = historico[historico.length - aumento];
-  }
-  else{
-
+    document.getElementById("inputform").value = historico[historico.length - aumento];
   }
   if(aumento < 2){
-    aumento = historico.length+1
+    aumento = historico.length+1;
   }
 }
 
 function colorirDivPadrao(){
   var elementoWelcome = document.querySelector('.welcome');
-  elementoWelcome.style.removeProperty('color');
-  //elementoWelcome.style.color = darkcolor;
+  if (elementoWelcome) elementoWelcome.style.removeProperty('color');
   var elementosTerminal = document.querySelectorAll('.myTerminal');
   elementosTerminal.forEach(function(elemento) {
-      elemento.style.removeProperty('color');
-      //elemento.style.color = darkcolor;
+    elemento.style.removeProperty('color');
   });
 }
 
 function divPadrao(x){
-
-  var listaDeComandos = ["mp3", "mp4", "short", "arquivo", "clear","cls","help","ajuda","color","qr","sobre","iploc", "fonte", "font", "read", "ler", "ai", "ia", "chat"];
+  var listaDeComandos = ["mp3", "mp4", "short", "arquivo", "clear","cls","help","ajuda","color","qr","sobre","iploc", "fonte", "font", "read", "ler", "ai", "ia", "chat", "lang", "language", "idioma", "lingua", "about"];
   listaDeComandos.forEach(comando => {
-      if (x.startsWith(comando + " ") || x === comando) { // Verifica se a string começa com o comando ou é exatamente igual ao comando
-        var y = removerParteDaString(x, comando);
-        console.log(y); 
-  
-        var div = document.createElement("div");
-        div.classList.add('padrao');
-        div.innerHTML = "<div class='myTerminal'>myterminal ></div> " + y;
-        document.getElementById("padrao2").append(div);
-      }
+    if (x.startsWith(comando + " ") || x === comando) {
+      var y = removerParteDaString(x, comando);
+      var div = document.createElement("div");
+      div.classList.add('padrao');
+      div.innerHTML = "<div class='myTerminal'>" + t('labels.prompt') + "</div> " + y;
+      document.getElementById("padrao2").append(div);
+    }
   });
 }
-
 
 function autoScrollDown(){
   window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: "smooth" });
 }
 
 function comandoInvalido(x){
-  var error = " <div class='erroSimples'> <-- COMANDO NÃO RECONHECIDO PELO SISTEMA! </div>"
-  
+  var errorHtml = " <div class='erroSimples'> <-- " + t('errors.unknownCommand') + " </div>";
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = "<div class='myTerminal'>myterminal ></div> " + x + error;
+  div.innerHTML = "<div class='myTerminal'>" + t('labels.prompt') + "</div> " + x + errorHtml;
   document.getElementById("padrao2").append(div);
-  //alert("Comando inválido");
 }
 
+/********** RESPOSTAS DE AJUDA/INFO **********/
 function resHelp() {
-  var div = document.createElement("div");
+  const items = t('help.items');
+  const maxLen = Math.max(...items.map(([cmd]) => cmd.length));
+  const colWidthCh = maxLen + 2;
+
+  const div = document.createElement("div");
   div.classList.add('padrao');
   document.getElementById("padrao2").append(div);
 
-  var texto  = 'myterminal > Lista de todos os comandos disponíveis :' +
-      '<div class="information">' +
-      '<br/>clear <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Limpe o chat</div>' +
-      '<br/>color <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mude a cor do texto</div>' +
-      '<br/>fonte <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Mude o tamanho da fonte</div>' +
-      '<br/>help <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Acho que você já sabe o quê esse comando faz</div>' +
-      '<br/>ia <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inicie uma conversa com o ChatGPT</div>' +
-      '<br/>iploc <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Localize um IP</div>' +
-      '<br/>mp3 <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baixe um áudio do Youtube ou Spotify</div>' +
-      '<br/>mp4 <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Baixe um vídeo de (quase) qualquer site</div>' +
-      '<br/>qr <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Crie um QRcode</div>' +
-      //'<br/>read <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leia matérias sem pagar a mensalidade do site</div>' +
-      '<br/>short <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Encurte URLs</div>' +
-      '<br/>sobre <div class="tooltip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Informações sobre o sistema</div>' +
-      "</div>";
+  let texto = `${t('labels.prompt')} ${t('info.helpTitle')}
+<div class="information help-table">`;
+
+  items.forEach(([cmd, desc]) => {
+    texto += `
+  <div class="help-row">
+    <span class="help-cmd" style="display:inline-block;width:${colWidthCh}ch">${cmd}</span>
+    <span class="help-desc tooltip">${desc}</span>
+  </div>`;
+  });
+
+  texto += `</div>`;
   Digitar(texto);
-
 }
 
-function Digitar(texto) {
 
-  var elementosPai = document.getElementsByClassName("padrao");
-  var ultimoElemento = elementosPai[elementosPai.length - 1];
-  
-  var elementoPai = ultimoElemento;
-  var index = 0;
-  var interval = setInterval(function() {
-      if (index <= texto.length) {
-          elementoPai.innerHTML =  texto.slice(0, index++).replace("/&nbsp;/g", '<span class="hide">&nbsp;</span>');
-          window.scrollTo(0, document.body.scrollHeight); // Role a página para baixo enquanto adiciona cada caractere
-      } else {
-          clearInterval(interval);
-          // Remover a classe de ocultar quando a digitação estiver completa
-          var spans = elementoPai.querySelectorAll('.hide');
-          for (var i = 0; i < spans.length; i++) {
-              spans[i].classList.remove('hide');
-          }
-      }
-  }, 0); // Intervalo de tempo entre cada caractere (em milissegundos)
-}
 
 function resColor(){
   var div = document.createElement("div");
   div.classList.add('padrao');
   document.getElementById("padrao2").append(div);
-  texto =  'Lista de comandos disponíveis junto ao color:'  +
-  '<br/>color blue' +
-  '<br/>color green' +
-  '<br/>color pink' +
-  '<br/>color red' +
-  '<br/>color white' +
-  '<br/>color yellow'+
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Estes comandos são utilizados para trocar a cor dos textos no terminal. ' 
+
+  let texto = t('info.colorHelpTitle')
+    + '<br/>' + t('guides.color')[0]
+    + '<br/>' + t('guides.color')[1]
+    + '<br/>' + t('guides.color')[2]
+    + '<br/>' + t('guides.color')[3]
+    + '<br/>' + t('guides.color')[4]
+    + '<br/>' + t('guides.color')[5]
+    + '<br/><br/><i class="fa-solid fa-circle-info"></i> ' + (currentLang === 'ptbr'
+      ? 'Estes comandos são utilizados para trocar a cor dos textos no terminal. '
+      : 'These commands change terminal text color.');
   Digitar(texto);
-
-}
-
-function resColorGreen(){
-  document.documentElement.style.color="#50FA7B";
-  document.getElementsByTagName('input')[0].style.color="#50FA7B";
-  document.getElementsByTagName('a')[0].style.color="#50FA7B";
-  $('.logostl').attr("src","imgs/greenman.gif");
-
-  darkcolor = "rgb(50, 128, 57)";
-}
-
-function resColorRed(){
-  document.documentElement.style.color="red";
-  document.getElementsByTagName('input')[0].style.color="red";
-  document.getElementsByTagName('a')[0].style.color="red";
-  $('.logostl').attr("src","imgs/redman.gif");
-
-  darkcolor = 'rgb(138 5 5)';
-}
-
-function resColorBlue(){
-  document.documentElement.style.color="rgb(53, 130, 230)";
-  document.getElementsByTagName('input')[0].style.color="rgb(53, 130, 230)";
-  document.getElementsByTagName('a')[0].style.color="rgb(53, 130, 230)";
-  $('.logostl').attr("src","imgs/blueman.gif");
-
-  darkcolor = 'rgb(66 68 151)';
-}
-
-function resColorWhite(){
-  document.documentElement.style.color="white";
-  document.getElementsByTagName('input')[0].style.color="white";
-  document.getElementsByTagName('a')[0].style.color="white";
-  $('.logostl').attr("src","imgs/whiteman.gif");
-
-  darkcolor = 'rgb(84 84 84)'
-
-}
-
-function resColorPink(){
-  document.documentElement.style.color="#BD93F9";
-  document.getElementsByTagName('input')[0].style.color="#BD93F9";
-  document.getElementsByTagName('a')[0].style.color="#BD93F9";
-  $('.logostl').attr("src","");
-  //$('.logostl').attr("src","https://im2.ezgif.com/tmp/ezgif-2-52fd5176f7.gif");
-  
-  darkcolor = 'rgb(94 61 102)'
-}
-
-function resColorYellow(){
-  document.documentElement.style.color="#F1FA8C";
-  document.getElementsByTagName('input')[0].style.color="#F1FA8C";
-  document.getElementsByTagName('a')[0].style.color="#F1FA8C";
-  $('.logostl').attr("src","");
-
-  darkcolor = 'rgb(138 79 11)' 
-}
-
-function resClear(){
-  var theColorIs = $('.welcome').css("color");
-  padrao2.style.css=(theColorIs);
-  padrao2.innerHTML = "";
 }
 
 function resLang(){
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao lang:'  +
-  '<br/>lang ptbr' +
-  '<br/>lang eng' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Estes comandos são utilizados para trocar o idioma dos textos no terminal. ' 
   document.getElementById("padrao2").append(div);
+  let texto = (currentLang === 'ptbr'
+      ? 'Lista de comandos disponíveis junto ao lang:'
+      : 'Available commands for lang:')
+    + '<br/>' + t('guides.lang')[0]
+    + '<br/>' + t('guides.lang')[1]
+    + '<br/><br/><i class="fa-solid fa-circle-info"></i> ' + t('info.langHelp');
+  Digitar(texto);
 }
 
 function resSobre(){
   var div = document.createElement("div");
   div.classList.add('padrao');
   document.getElementById("padrao2").append(div);
-  texto = 'Mais informações sobre este sistema:' +
-  '<br/><br/>Este Terminal foi desenvolvido por Victor Sales e tem o intuito de reunir ferramentas úteis para o desenvolvedor.' +
-  '<br/>Quem sabe você não encontra algo útil pra você também?'+
-  '<br/>O aplicativo foi desenvolvido com HTML, CSS e JavaScript'
+  let texto = t('info.about') +
+    '<br/><br/>' + t('info.aboutBody');
   Digitar(texto);
+}
+
+function duvidaMp4(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  document.getElementById("padrao2").append(div);
+  let g = t('guides.mp4');
+  let texto = (currentLang === 'ptbr' ? 'Lista de comandos disponíveis junto ao mp4:' : 'Available commands for mp4:')
+    + `<br/>${g[0]}`
+    + `<br/>${g[1]}`
+    + `<br/><br/><i class="fa-solid fa-circle-info"></i> ${g[2]}`;
+  Digitar(texto);
+}
+
+function duvidaMp3(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  document.getElementById("padrao2").append(div);
+  let g = t('guides.mp3');
+  let texto = (currentLang === 'ptbr' ? 'Lista de comandos disponíveis junto ao mp3:' : 'Available commands for mp3:')
+    + `<br/>${g[0]}`
+    + `<br/>${g[1]}`
+    + `<br/><br/><i class="fa-solid fa-circle-info"></i> ${g[2]}`;
+  Digitar(texto);
+}
+
+function duvidaQR(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  document.getElementById("padrao2").append(div);
+  let g = t('guides.qr');
+  let texto = (currentLang === 'ptbr' ? 'Lista de comandos disponíveis junto ao QR:' : 'Available commands for qr:')
+    + `<br/>${g[0]}`
+    + `<br/>${g[1]}`
+    + `<br/><br/><i class="fa-solid fa-circle-info"></i> ${g[2]}`;
+  Digitar(texto);
+}
+
+function duvidaIploc(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  document.getElementById("padrao2").append(div);
+  let g = t('guides.iploc');
+  let texto = (currentLang === 'ptbr' ? 'Lista de comandos disponíveis junto ao iploc:' : 'Available commands for iploc:')
+    + `<br/>${g[0]}`
+    + `<br/>${g[1]}`
+    + `<br/><br/><i class="fa-solid fa-circle-info"></i> ${g[2]}`;
+  Digitar(texto);
+}
+
+function duvidaShort(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  document.getElementById("padrao2").append(div);
+  let g = t('guides.short');
+  let texto = (currentLang === 'ptbr' ? 'Lista de comandos disponíveis junto ao short:' : 'Available commands for short:')
+    + `<br/>${g[0]}`
+    + `<br/>${g[1]}`
+    + `<br/><br/><i class="fa-solid fa-circle-info"></i> ${g[2]}`;
+  Digitar(texto);
+}
+
+function duvidaIA(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  document.getElementById("padrao2").append(div);
+  let g = t('guides.ia');
+  let texto = (currentLang === 'ptbr' ? 'Lista de comandos disponíveis junto ao ia:' : 'Available commands for ai/ia:')
+    + `<br/>${g[0]}`
+    + `<br/>${g[1]}`
+    + `<br/><br/><i class="fa-solid fa-circle-info"></i> ${g[2]}`;
+  Digitar(texto);
+}
+
+function duvidaRead(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  document.getElementById("padrao2").append(div);
+  let g = t('guides.read');
+  let texto = (currentLang === 'ptbr' ? 'Lista de comandos disponíveis junto ao read:' : 'Available commands for read:')
+    + `<br/>${g[0]}`
+    + `<br/>${g[1]}`
+    + `<br/><br/><i class="fa-solid fa-circle-info"></i> ${g[2]}`;
+  Digitar(texto);
+}
+
+function duvidaFonte(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  document.getElementById("padrao2").append(div);
+  let g = t('guides.fonte');
+  let texto = (currentLang === 'ptbr' ? 'Lista de comandos disponíveis junto ao fonte:' : 'Available commands for font/fonte:')
+    + `<br/>${g[0]}`
+    + `<br/>${g[1]}`
+    + `<br/><br/><i class="fa-solid fa-circle-info"></i> ${g[2]}`;
+  Digitar(texto);
+}
+
+function duvidaWpp(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  let g = t('guides.wpp');
+  div.innerHTML = (currentLang === 'ptbr' ? 'Lista de comandos disponíveis junto ao wpp:' : 'Available commands for wpp:')
+    + `<br/>${g[0]}`
+    + `<br/>${g[1]}`
+    + `<br/><br/><i class="fa-solid fa-circle-info"></i> ${g[2]}`;
+  document.getElementById("padrao2").append(div);
+}
+
+function duivdaArquivo(){
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  let g = t('guides.arquivo');
+  div.innerHTML = (currentLang === 'ptbr' ? 'Lista de comandos disponíveis junto ao Arquivo:' : 'Available commands for arquivo:')
+    + `<br/>${g[0]}`
+    + `<br/>${g[1]}`
+    + `<br/>${g[2]}`
+    + `<br/><ul><li>CachePass</li></ul>`
+    + `<i class="fa-solid fa-circle-info"></i> ${g[3]}`;
+  document.getElementById("padrao2").append(div);
+}
+
+/********** TYPER **********/
+function Digitar(texto) {
+  var elementosPai = document.getElementsByClassName("padrao");
+  var ultimoElemento = elementosPai[elementosPai.length - 1];
+  var elementoPai = ultimoElemento;
+  var index = 0;
+  var interval = setInterval(function() {
+    if (index <= texto.length) {
+      elementoPai.innerHTML =  texto.slice(0, index++).replace("/&nbsp;/g", '<span class="hide">&nbsp;</span>');
+      window.scrollTo(0, document.body.scrollHeight);
+    } else {
+      clearInterval(interval);
+      var spans = elementoPai.querySelectorAll('.hide');
+      for (var i = 0; i < spans.length; i++) {
+        spans[i].classList.remove('hide');
+      }
+    }
+  }, 0);
+}
+
+/********** CORES **********/
+function resColorGreen(){
+  document.documentElement.style.color="#50FA7B";
+  document.getElementsByTagName('input')[0].style.color="#50FA7B";
+  document.getElementsByTagName('a')[0].style.color="#50FA7B";
+  $('.logostl').attr("src","imgs/greenman.gif");
+  darkcolor = "rgb(50, 128, 57)";
+}
+function resColorRed(){
+  document.documentElement.style.color="red";
+  document.getElementsByTagName('input')[0].style.color="red";
+  document.getElementsByTagName('a')[0].style.color="red";
+  $('.logostl').attr("src","imgs/redman.gif");
+  darkcolor = 'rgb(138 5 5)';
+}
+function resColorBlue(){
+  document.documentElement.style.color="rgb(53, 130, 230)";
+  document.getElementsByTagName('input')[0].style.color="rgb(53, 130, 230)";
+  document.getElementsByTagName('a')[0].style.color="rgb(53, 130, 230)";
+  $('.logostl').attr("src","imgs/blueman.gif");
+  darkcolor = 'rgb(66 68 151)';
+}
+function resColorWhite(){
+  document.documentElement.style.color="white";
+  document.getElementsByTagName('input')[0].style.color="white";
+  document.getElementsByTagName('a')[0].style.color="white";
+  $('.logostl').attr("src","imgs/whiteman.gif");
+  darkcolor = 'rgb(84 84 84)';
+}
+function resColorPink(){
+  document.documentElement.style.color="#BD93F9";
+  document.getElementsByTagName('input')[0].style.color="#BD93F9";
+  document.getElementsByTagName('a')[0].style.color="#BD93F9";
+  $('.logostl').attr("src","");
+  darkcolor = 'rgb(94 61 102)';
+}
+function resColorYellow(){
+  document.documentElement.style.color="#F1FA8C";
+  document.getElementsByTagName('input')[0].style.color="#F1FA8C";
+  document.getElementsByTagName('a')[0].style.color="#F1FA8C";
+  $('.logostl').attr("src","");
+  darkcolor = 'rgb(138 79 11)';
+}
+
+/********** OUTROS **********/
+function resClear(){
+  var theColorIs = $('.welcome').css("color");
+  padrao2.style.css=(theColorIs);
+  padrao2.innerHTML = "";
 }
 
 function resFonte(newFontesize){
@@ -227,28 +526,27 @@ function resFonte(newFontesize){
   div.classList.add('padrao');
   document.getElementById("padrao2").append(div);
   if(newFontesize > 30){
-    newFontesize = 30
-        texto = 'Você escolheu um tamanho muito grande, a fonte foi alterada para o tamanho: ' + newFontesize;
+    newFontesize = 30;
+    texto = t('info.fontTooBig', newFontesize);
   }
   else if (newFontesize < 10){
-    newFontesize = 10
-    texto = 'Você escolheu um tamanho muito pequeno, a fonte foi alterada para o tamanho: ' + newFontesize;
+    newFontesize = 10;
+    texto = t('info.fontTooSmall', newFontesize);
   }
   else{
-    texto = 'Tamanho da fonte alterado para: ' + newFontesize;
+    texto = t('info.fontChanged', newFontesize);
   }
-  var fontepx = newFontesize + 'px'; 
-  var inputHtml = document.getElementsByTagName('input')[0]
+  var fontepx = newFontesize + 'px';
+  var inputHtml = document.getElementsByTagName('input')[0];
   inputHtml.style.fontSize = fontepx;
   document.body.style.fontSize = fontepx;
   Digitar(texto);
 }
 
-
 function resIpLoc(_newip) {
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = "Carregando informações sobre o IP...";
+  div.innerHTML = t('info.ipLoading');
   document.getElementById("padrao2").append(div);
 
   $.ajax({
@@ -256,57 +554,53 @@ function resIpLoc(_newip) {
     method: 'GET',
   }).done(function (response) {
     let stringrede = JSON.stringify(response.cidr);
-    console.log(stringrede);
     if (!(stringrede).includes("null")) {
       try {
-        var texto = 'ip : ' + response.ip + '<br>' +
-          'rede : ' + response.cidr + '<br>' +
-          'continente : ' + response.continent + '<br>' +
-          'país : ' + response.country + '<br>' +
-          'região : ' + response.region + '<br>' +
-          'cidade : ' + response.city + '<br>' +
-          'vpn/proxy : ' + response.is_vpn_proxy + '<br>';
+        var texto = t('info.ipLabel','ip', response.ip) + '<br>' +
+          t('info.ipLabel','rede', response.cidr) + '<br>' +
+          t('info.ipLabel','continente', response.continent) + '<br>' +
+          t('info.ipLabel','país', response.country) + '<br>' +
+          t('info.ipLabel','região', response.region) + '<br>' +
+          t('info.ipLabel','cidade', response.city) + '<br>' +
+          t('info.ipLabel','vpn/proxy', response.is_vpn_proxy) + '<br>';
       } catch {
-        console.log('Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.');
-        texto = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.';
+        console.log(t('errors.ipError'));
+        texto = '<i class="fa-solid fa-triangle-exclamation"></i> ' + t('errors.ipError');
       }
     } else {
-      texto = '<i class="fa-solid fa-triangle-exclamation"></i> IP inválido.';
+      texto = '<i class="fa-solid fa-triangle-exclamation"></i> ' + t('errors.ipInvalid');
     }
     div.innerHTML = texto;
   });
 }
 
-
 function resNetInfo(){
-    $.getJSON('https://api.db-ip.com/v2/free/self', function(data) {
-      console.log(JSON.stringify(data, null, 2));
-      console.log(data);
-      newdata = JSON.stringify(data)
-      newdata2 = newdata.split("{").join("")
-      newdata2 = newdata2.split("}").join("")
-      newdata2 = newdata2.split('"').join('')
-      newdata2 = newdata2.split(':').join(' : ')
-      newdata2 = newdata2.split(",").join("<br />")
-      var div = document.createElement("div");
-      div.classList.add('padrao');
-          try{
-          div.innerHTML = newdata2
-          }
-      catch{
-        console.log('Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.')
-        div.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Erro ao obter informações sobre o endereço IP. Verifique suas configurações de privacidade de rede.'
-      }
-       document.getElementById("padrao2").append(div);
-       autoScrollDown();
-});
-
+  $.getJSON('https://api.db-ip.com/v2/free/self', function(data) {
+    newdata = JSON.stringify(data);
+    newdata2 = newdata.split("{").join("");
+    newdata2 = newdata2.split("}").join("");
+    newdata2 = newdata2.split('"').join('');
+    newdata2 = newdata2.split(':').join(' : ');
+    newdata2 = newdata2.split(",").join("<br />");
+    var div = document.createElement("div");
+    div.classList.add('padrao');
+    try{
+      div.innerHTML = newdata2;
+    }
+    catch{
+      console.log(t('errors.ipError'));
+      div.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> ' + t('errors.ipError');
+    }
+    document.getElementById("padrao2").append(div);
+    autoScrollDown();
+  });
 }
 
+/********** PARSERS **********/
 function pegarID(_url){
   newurl = _url.split('mp4 ').join('');
   newurl = _url.split('mp3 ').join('');
-  newurl = newurl.match(/([a-z0-9_-]{11})/gim)[0]
+  newurl = newurl.match(/([a-z0-9_-]{11})/gim)[0];
 }
 
 function pegarURL(_url){
@@ -316,143 +610,35 @@ function pegarURL(_url){
 }
 
 function pegarIP(ip){
-newip = ip.split('iploc ').join('');
-resIpLoc(newip);
+  newip = ip.split('iploc ').join('');
+  resIpLoc(newip);
 }
 
 function pegarFonteSize(fontesize){
+  let newFontesize;
   if(fontesize[4] == "e"){
     newFontesize = fontesize.split('fonte ').join('');
   }
   else{
     newFontesize = fontesize.split('font ').join('');
   }
-
   resFonte(newFontesize);
-  }
-
-function duvidaMp4(){
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  document.getElementById("padrao2").append(div);
-  texto = 'Lista de comandos disponíveis junto ao mp4:'  +
-  '<br/>mp4 + [URL]' +
-  '<br/>ex: mp4 https://youtu.be/3ZnHr62W72Q' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar vídeos do YouTube, Instagram, Facebook, Twitter, Tiktok e Reddit em 720p.' 
-  Digitar(texto);
 }
 
-function duvidaMp3(){
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  document.getElementById("padrao2").append(div);
-  texto = 'Lista de comandos disponíveis junto ao mp3:'  +
-  '<br/>mp3 + [URL]' +
-  '<br/>ex: mp3 https://youtu.be/3ZnHr62W72Q' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar áudios do YouTube ou Spotify.' 
-  Digitar(texto);
-}
-
-function duvidaQR(){
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  document.getElementById("padrao2").append(div);
-  texto = 'Lista de comandos disponíveis junto ao QR:'  +
-  '<br/>qr + [URL]' +
-  '<br/>ex: qr google.com' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para criar um QR Code com destino à uma URL. ' 
-  Digitar(texto);
-}
-
-function duvidaIploc(){
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  document.getElementById("padrao2").append(div);
-  texto = 'Lista de comandos disponíveis junto ao iploc:'  +
-  '<br/>iploc + [ipv4]' +
-  '<br/>ex: iploc 8.8.8.8' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para obter informações sobre um Ipv4 ' 
-  Digitar(texto);
-}
-
-function duvidaShort(){
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  document.getElementById("padrao2").append(div);
-  texto = 'Lista de comandos disponíveis junto ao short:'  +
-  '<br/>short + [URL]' +
-  '<br/>ex: short google.com' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para encurtar URLs. ' 
-  Digitar(texto);
-}
-
-function duvidaIA(){
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  document.getElementById("padrao2").append(div);
-  texto = 'Lista de comandos disponíveis junto ao ia:'  +
-  '<br/>ia + [Texto]' +
-  '<br/>ex: ia Por quê o Cruzeiro é o melhor time de Minas Gerais?' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para gerar uma conversa com o chat GPT.' 
-  Digitar(texto);
-}
-
-function duvidaRead(){
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  document.getElementById("padrao2").append(div);
-  texto = 'Lista de comandos disponíveis junto ao read:'  +
-  '<br/>read + [URL]' +
-  '<br/>ex: read https://www.estadao.com.br/economia/acordo-itaipu-conta-luz-obras/' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para visualizar sites de notícias passando pelo paywall. ';
-  Digitar(texto);
-}
-
-function duvidaFonte(){
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  document.getElementById("padrao2").append(div);
-  texto = 'Lista de comandos disponíveis junto ao fonte:'  +
-  '<br/>fonte + [Número da fonte]' +
-  '<br/>ex: fonte 18' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para mudar o tamanho da fonte, o valor padrão é 16. ';
-  Digitar(texto);
-}
-
-function duvidaWpp(){
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao wpp:'  +
-  '<br/>wpp + [Número de Telefone]' +
-  '<br/>ex: wpp 553171239966' +
-  '<br/><br/><i class="fa-solid fa-circle-info"></i> Este comando é utilizado para enviar mensagens via whatsapp. ' 
-  document.getElementById("padrao2").append(div);
-}
-
-function duivdaArquivo(){
-  var div = document.createElement("div");
-  div.classList.add('padrao');
-  div.innerHTML = 'Lista de comandos disponíveis junto ao Arquivo:'  +
-  '<br/>arquivo + [Nome do Arquivo]' +
-  '<br/>ex: arquivo cachepass' +
-  '<br/>Arquivos disponíveis:' +
-  '<br/><ul><li>CachePass</li></ul>' +
-  '<i class="fa-solid fa-circle-info"></i> Este comando é utilizado para baixar arquivos.' 
-  document.getElementById("padrao2").append(div);
-}
-
+/********** AÇÕES **********/
 function resmandarMsg(x){
-  input_url = x.split('wpp ').join('');
+  let input_url = x.split('wpp ').join('');
 
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Solicitação de mensagem aberta em nova aba.'
+  div.innerHTML = t('info.msgOpened');
   document.getElementById("padrao2").append(div);
 
-    var win = window.open("https://wa.me/"+input_url)
+  window.open("https://wa.me/"+input_url);
 }
 
 function resIA(x) {
+  let input_url = x;
   if (x.startsWith("ia ")) {
     input_url = x.split('ia ').join('');
   } else if (x.startsWith("ai ")) {
@@ -463,102 +649,84 @@ function resIA(x) {
 
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Enviando sua mensagem aos servidores do Chat GPT...'
+  div.innerHTML = t('info.sendingToGPT');
   document.getElementById("padrao2").append(div);
 
-  // Faz a chamada AJAX para o endpoint no backend
   $.ajax({
     url: '/api/getResIA',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({ input: input_url })
   }).done(function (response) {
-    // Manipula a resposta recebida do backend
     texto = "🤖 <div class='tooltip'> ChatGPT:&nbsp;</div>" + response.message;
     Digitar(texto);
   }).fail(function (error) {
     console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao se conectar com o Chat GPT.');
+    Digitar(t('errors.gptErr'));
   });
 }
 
-
 function resArquivoCachePass(x){
-  input_url = x.split('wpp ').join('');
-
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Download de CachePass iniciado em nova aba.'
+  div.innerHTML = t('info.cachePass');
   document.getElementById("padrao2").append(div);
-
-    var win = window.open("https://github.com/v1ctorsales/Senhas-Wifi/raw/main/Cache.Pass.exe")
+  window.open("https://github.com/v1ctorsales/Senhas-Wifi/raw/main/Cache.Pass.exe");
 }
 
-function resQR(x){ //dando erro
-
-  input_url = x.split('qr ').join('');
+function resQR(x){
+  let input_url = x.split('qr ').join('');
 
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Criando QR Code...'
+  div.innerHTML = t('info.makingQR');
   document.getElementById("padrao2").append(div);
 
   if(input_url != ''){
-
-    if(input_url.startsWith("http")){
-
+    if(!input_url.startsWith("http")){
+      input_url = ("https://"+input_url);
     }
-    else{
-      input_url = ("https://"+input_url)
-    }
-  }
-  else{
-    texto = 'URL inválida'
-    Digitar(texto);
+  } else {
+    Digitar(t('info.invalidURL'));
+    return;
   }
 
   try{
-    texto = 'QR Code de '+ input_url + ' gerado com sucesso! <br> <br>' + '<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='+input_url+'">'
+    texto = t('info.qrOk', input_url) + ' <br> <br>' +
+      '<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='+input_url+'">';
     Digitar(texto);
   }
   catch{
-    texto = 'Erro ao gerar o QR Code'
-    Digitar(texto);
+    Digitar(currentLang === 'ptbr' ? 'Erro ao gerar o QR Code' : 'Error generating QR Code');
   }
+}
 
-    }
+function resShort(x) {
+  let input_url = x.split('short ').join('');
 
-    function resShort(x) {
-      input_url = x.split('short ').join('');
-    
-      var div = document.createElement("div");
-      div.classList.add('padrao');
-      div.innerHTML = 'Encurtando URL...'
-      document.getElementById("padrao2").append(div);
-    
-      // Ajuste na chamada AJAX para enviar os dados corretamente
-      $.ajax({
-        url: '/api/getShort', // Rota do seu backend
-        method: 'POST',
-        contentType: 'application/json',
-        // Corpo da requisição deve ser uma string JSON
-        data: JSON.stringify({ url: input_url })
-      }).done(function (response) {
-        // Manipula a resposta recebida do backend
-        const shortenedUrl = response.result_url;
-        console.log("URL encurtada:", shortenedUrl);
-        const texto = `Sua URL foi encurtada para: ${shortenedUrl} e já está disponível no seu CTRL+V`;
-        Digitar(texto); 
-        navigator.clipboard.writeText(shortenedUrl);
-      }).fail(function (error) {
-        console.error('Erro ao enviar requisição ao backend:', error);
-        Digitar('Houve um erro ao encurtar a URL.');
-      });
-    }
-    
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = t('info.shortingURL');
+  document.getElementById("padrao2").append(div);
+
+  $.ajax({
+    url: '/api/getShort',
+    method: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({ url: input_url })
+  }).done(function (response) {
+    const shortenedUrl = response.result_url;
+    const texto = t('info.shortDone', shortenedUrl);
+    Digitar(texto);
+    navigator.clipboard.writeText(shortenedUrl);
+  }).fail(function (error) {
+    console.error('Erro ao enviar requisição ao backend:', error);
+    Digitar(t('errors.shortErr'));
+  });
+}
 
 function resRead(x){
-
+  let url;
   if(x.startsWith("read ")){
     url = x.split('read ').join('');
   }
@@ -566,66 +734,54 @@ function resRead(x){
     url = x.split('ler ').join('');
   }
 
-  window.open("https://leiaisso.net/" + url) 
+  window.open("https://leiaisso.net/" + url);
 
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'Página aberta em nova aba. Boa leitura!'
+  div.innerHTML = t('info.pageOpened');
   document.getElementById("padrao2").append(div);
-
 }
 
+/********** DOWNLOADERS **********/
 function resMp4TikTok(url) {
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'myterminal > Iniciando o download...';
+  div.innerHTML = t('labels.prompt') + ' ' + t('info.startingDownload');
   document.getElementById("padrao2").append(div);
 
-  // Faz a chamada AJAX para o endpoint no backend
   $.ajax({
     url: '/api/getMp4Tiktok',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({ url })
   }).done(function (response) {
-    // Manipula a resposta recebida do backend
     window.open(response.data.play, '_blank');
-
-    div.innerHTML = 'myterminal > Download iniciado em nova guia.';
+    div.innerHTML = t('labels.prompt') + ' ' + t('info.downloadStarted');
     document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o vídeo do TikTok.');
+  }).fail(function () {
+    Digitar(t('errors.tiktokErr'));
   });
 }
-
 
 function resMp4Youtube(video_id) {
   var div = document.createElement("div");
   div.classList.add('padrao');
-  console.log(video_id);
-  div.innerHTML = 'myterminal > Iniciando o download...';
+  div.innerHTML = t('labels.prompt') + ' ' + t('info.startingDownload');
   document.getElementById("padrao2").append(div);
 
-  // Faz a chamada AJAX para o endpoint no backend
   $.ajax({
     url: '/api/getMp4Yt',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({ video_id })
   }).done(function (response) {
-    // Manipula a resposta recebida do backend
-    console.log("DATA " , response);
-    console.log(response.formats[0].url)
     window.open(response.formats[0].url,'_blank');
-    div.innerHTML = 'myterminal > Download iniciado em nova guia.';
+    div.innerHTML = t('labels.prompt') + ' ' + t('info.downloadStarted');
     document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o vídeo do YouTube.');
+  }).fail(function () {
+    Digitar(t('errors.ytErr'));
   });
 }
-
 
 function resMp4Instagram(urlInstagram, type) {
   if (urlInstagram.includes("mp4 ")) {
@@ -634,10 +790,8 @@ function resMp4Instagram(urlInstagram, type) {
 
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'myterminal > Iniciando o download...';
+  div.innerHTML = t('labels.prompt') + ' ' + t('info.startingDownload');
   document.getElementById("padrao2").append(div);
-
-  console.log("type", type)
 
   $.ajax({
     url: '/api/getMp4Insta',
@@ -645,24 +799,21 @@ function resMp4Instagram(urlInstagram, type) {
     contentType: 'application/json',
     data: JSON.stringify({ url: urlInstagram, type })
   }).done(function (response) {
-    console.log(response);
     if (response === "") {
-      div.innerHTML = 'myterminal > Erro! Não temos acesso a conteúdos de contas privadas.';
+      div.innerHTML = t('labels.prompt') + ' ' + ('<i class="fa-solid fa-triangle-exclamation"></i> ' + t('errors.privateInsta'));
     }
     if (type === "highlights") {
       for (let i = 0; i < response.length; i++) {
-              window.open(response[i], '_blank');
+        window.open(response[i], '_blank');
       }
-      div.innerHTML = 'myterminal > Download iniciado em novas guias.';
-  }
-    else {
+      div.innerHTML = t('labels.prompt') + ' ' + t('info.downloadsStarted');
+    } else {
       window.open(response.video, '_blank');
-      div.innerHTML = 'myterminal > Download iniciado em nova guia.';
+      div.innerHTML = t('labels.prompt') + ' ' + t('info.downloadStarted');
     }
     document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o vídeo do Instagram.');
+  }).fail(function () {
+    Digitar(t('errors.instaErr'));
     document.getElementById("padrao2").append(div);
   });
 }
@@ -674,479 +825,427 @@ function resMp4Twitter(urlTwitter) {
 
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'myterminal > Iniciando o download...';
+  div.innerHTML = t('labels.prompt') + ' ' + t('info.startingDownload');
   document.getElementById("padrao2").append(div);
 
-  // Faz a chamada AJAX para o endpoint no backend
   $.ajax({
     url: '/api/getMp4Twitter',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({ url: urlTwitter })
   }).done(function (response) {
-    console.log(response.media.video.videoVariants[0].url);
     window.open(response.media.video.videoVariants[0].url, '_blank');
-    div.innerHTML = 'myterminal > Download iniciado em nova guia.';
+    div.innerHTML = t('labels.prompt') + ' ' + t('info.downloadStarted');
     document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o vídeo do Twitter.');
+  }).fail(function () {
+    Digitar(t('errors.twitterErr'));
     document.getElementById("padrao2").append(div);
   });
 }
-
 
 function resMp4Outros(url) {
   if (url.includes("mp4 ")) {
     url = url.split('mp4 ').join('');
   }
-
   if (url.includes("web.")) {
     url = url.split('web.').join('');
   }
 
   var div = document.createElement("div");
   div.classList.add('padrao');
-  div.innerHTML = 'myterminal > Iniciando o download...';
+  div.innerHTML = t('labels.prompt') + ' ' + t('info.startingDownload');
   document.getElementById("padrao2").append(div);
 
-  // Faz a chamada AJAX para o endpoint no backend
   $.ajax({
     url: '/api/getMp4Outros',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({ url: url })
   }).done(function (response) {
-    console.log(response);
-    console.log(response['720P'].url);
     window.open(response['720P'].url, '_blank');
-    div.innerHTML = 'myterminal > Download iniciado em nova guia.';
+    div.innerHTML = t('labels.prompt') + ' ' + t('info.downloadStarted');
     document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o vídeo de outros sites.');
+  }).fail(function () {
+    Digitar(t('errors.otherSitesErr'));
     document.getElementById("padrao2").append(div);
   });
 }
 
-
 function resMp3(video_id) {
   var div = document.createElement("div");
   div.classList.add('padrao');
-  
-  div.innerHTML = 'myterminal > Iniciando o download...';
+  div.innerHTML = t('labels.prompt') + ' ' + t('info.startingDownload');
   document.getElementById("padrao2").append(div);
-  
-  // Faz a chamada AJAX para o endpoint no backend
+
   $.ajax({
     url: '/api/getMp3Yt',
     method: 'POST',
     contentType: 'application/json',
     data: JSON.stringify({ video_id: video_id })
   }).done(function (response) {
-    console.log(response);
-    console.log(response.link[0]);
     window.open(response.link, '_blank');
-    div.innerHTML = 'myterminal > Download iniciado em nova guia.';
+    div.innerHTML = t('labels.prompt') + ' ' + t('info.downloadStarted');
     document.getElementById("padrao2").append(div);
-  }).fail(function (error) {
-    console.error('Erro ao enviar requisição ao backend:', error);
-    Digitar('Houve um erro ao baixar o áudio.');
+  }).fail(function () {
+    Digitar(t('errors.audioErr'));
     document.getElementById("padrao2").append(div);
   });
 }
 
 function resMp3Spotify(x) {
-    var div = document.createElement("div");
-    div.classList.add('padrao');
+  var div = document.createElement("div");
+  div.classList.add('padrao');
+  div.innerHTML = t('labels.prompt') + ' ' + t('info.startingDownload');
+  document.getElementById("padrao2").append(div);
 
-    div.innerHTML = 'myterminal > Iniciando o download...';
-    document.getElementById("padrao2").append(div);
+  var input_url = x.trim();
+  if (input_url.startsWith('mp3 ')) {
+    input_url = input_url.substring(4);
+  }
+  if (input_url.includes("/intl-pt/")) {
+    input_url = input_url.replace("/intl-pt/", "/");
+  }
 
-    var input_url = x.trim();
-    console.log('URL enviada:', input_url);
-
-    if (input_url.startsWith('mp3 ')) {
-        input_url = input_url.substring(4);
-    }
-
-    if (input_url.includes("/intl-pt/")) {
-        input_url = input_url.replace("/intl-pt/", "/");
-    }
-    // Requisição Ajax para obter o link de download
-    $.ajax({
-        url: '/api/getMp3Spot',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ newinput_url: input_url })
-    }).done(function (response) {
-      console.log("response", response)
-        if (response) {
-            const link = response.data.downloadLink;
-            console.log('Link recebido:', link);
-
-                // 🟡 Abrir nova aba imediatamente (evita bloqueio do navegador)
-    const novaAba = window.open('', '_blank');
-    if (!novaAba) {
-        div.innerHTML = 'myterminal > Falha ao abrir nova aba. Desative o bloqueador de pop-ups.';
+  // Abrimos a aba logo para evitar bloqueio
+  let novaAba = window.open('', '_blank');
+  $.ajax({
+    url: '/api/getMp3Spot',
+    method: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({ newinput_url: input_url })
+  }).done(function (response) {
+    if (response) {
+      const link = response.data.downloadLink;
+      if (!novaAba) {
+        div.innerHTML = t('labels.prompt') + ' ' + t('errors.popupBlocked');
         document.getElementById("padrao2").append(div);
         return;
+      }
+      novaAba.location.href = link;
+      div.innerHTML = t('labels.prompt') + ' ' + t('info.downloadStarted');
+    } else {
+      if (novaAba) novaAba.close();
+      div.innerHTML = t('labels.prompt') + ' ' + t('errors.downloadFail');
     }
-
-
-            novaAba.location.href = link; // 🔁 Redireciona a nova aba para o link
-            div.innerHTML = 'myterminal > Download iniciado em nova guia.';
-        } else {
-            novaAba.close(); // Fecha a aba se falhar
-            div.innerHTML = 'myterminal > Não foi possível iniciar o download.';
-        }
-
-        document.getElementById("padrao2").append(div);
-    }).fail(function (jqXHR, textStatus, errorThrown) {
-        console.error('Erro completo:', jqXHR, textStatus, errorThrown);
-        novaAba.close();
-        div.innerHTML = 'Houve um erro ao baixar o áudio.';
-        document.getElementById("padrao2").append(div);
-    });
+    document.getElementById("padrao2").append(div);
+  }).fail(function () {
+    if (novaAba) novaAba.close();
+    div.innerHTML = t('errors.audioErr');
+    document.getElementById("padrao2").append(div);
+  });
 }
 
-
-
-
-  function removerParteDaString(texto, parteASerRemovida) {
-    // Verificar se a parteASerRemovida está presente na string
-    var indice = texto.indexOf(parteASerRemovida);
-  
-    // Se a parteASerRemovida for encontrada, remover e envolver com a classe "information"
-    if (indice !== -1) {
-      var parteRemovida = texto.slice(indice, indice + parteASerRemovida.length);
-      var resultado = texto.replace(parteRemovida, "<div class='information'>" + parteRemovida + "</div>");
-      return resultado;
-    } else {
-      // Se a parteASerRemovida não for encontrada, retornar a string original
-      return texto;
-    }
+/********** UTILS **********/
+function removerParteDaString(texto, parteASerRemovida) {
+  var indice = texto.indexOf(parteASerRemovida);
+  if (indice !== -1) {
+    var parteRemovida = texto.slice(indice, indice + parteASerRemovida.length);
+    var resultado = texto.replace(parteRemovida, "<div class='information'>" + parteRemovida + "</div>");
+    return resultado;
+  } else {
+    return texto;
   }
-  
+}
 
-
+/********** ROUTER **********/
 function validateForm() {
-
   var elementos = document.querySelectorAll('.myTerminal');
-    let x = document.forms["myForm"]["fname"].value;
-    let _input = document.getElementsByName('fname')[0];
-    Armazenar(x);
-    colorirDivPadrao();
+  let x = document.forms["myForm"]["fname"].value;
+  let _input = document.getElementsByName('fname')[0];
+  Armazenar(x);
+  colorirDivPadrao();
 
-    if(!x.startsWith("mp")){
-      x = x.toLowerCase();
-    }
-    else{}
-
-    if (x == "help" || x == "ajuda") {
-      divPadrao(x);
-      resHelp();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else if (x == "color") {
-      divPadrao(x);
-      resColor();
-      _input.value= "";
-      autoScrollDown();
-      return false;
-    }
-    else if (x == "color green") {
-      divPadrao(x);
-      resColorGreen();
-      autoScrollDown();
-      colorirDivPadrao()
-      _input.value= "";
-      return false;
-    }
-    else if (x == "color red") {
-      divPadrao(x);
-      resColorRed();
-      autoScrollDown();
-      colorirDivPadrao();
-      _input.value= "";
-      return false;
-    }
-    else if (x == "color blue") {
-      divPadrao(x);
-      resColorBlue();
-      autoScrollDown();
-      colorirDivPadrao()
-      _input.value= "";
-      return false;
-    }
-    else if (x == "color white") {
-      divPadrao(x);
-      resColorWhite();
-      autoScrollDown();
-      colorirDivPadrao()
-      _input.value= "";
-      return false;
-    }
-    else if (x == "color pink") {
-      divPadrao(x);
-      resColorPink();
-      autoScrollDown();
-      colorirDivPadrao()
-      _input.value= "";
-      return false;
-    }
-    else if (x == "color yellow") {
-      divPadrao(x);
-      resColorYellow();
-      autoScrollDown();
-      colorirDivPadrao()
-      _input.value= "";
-      return false;
-    }
-    else if (x == "clear" || x== "cls") {
-      divPadrao(x);
-      resClear();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else if (x == "sobre" || x=="about") {
-      divPadrao(x);
-      resSobre();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else if (x == "fonte" || x=="font") {
-      divPadrao(x);
-      duvidaFonte();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else if (x.includes("fonte ") || x.includes("font ")) {
-      divPadrao(x);
-      pegarFonteSize(x);
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else if (x.includes("mp4 ")) {
-      try{
-        divPadrao(x);
-        if(x.includes("youtube.") || x.includes("yout.") || x.includes("youtu."))
-        {
-          pegarID(x); 
-          resMp4Youtube(newurl)
-        }
-        else if (x.includes("instagram") && x.includes("/highlights/"))
-        {
-          pegarURL(x)
-          type = 'highlights'
-          resMp4Instagram(newurlInstagram, type)
-        }
-        else if (x.includes("instagram") && x.includes("/stories/"))
-        {
-          pegarURL(x)
-          type = 'stories'
-          resMp4Instagram(newurlInstagram, type)
-        }
-        else if (x.includes("instagram") && x.includes("m/p/"))
-        {
-          pegarURL(x)
-          type = 'post'
-          resMp4Instagram(newurlInstagram, type)
-        }
-        else if (x.includes("instagram") && x.includes("/reel/"))
-        {
-          pegarURL(x)
-          type = 'post'
-          resMp4Instagram(newurlInstagram, type)
-        }
-        else if (x.includes("x.com") || x.includes("twitter"))
-        {
-          pegarURL(x)
-          resMp4Twitter(newurlInstagram)
-        }
-        else if(x.includes("tiktok.")){
-          pegarURL(x);
-          resMp4TikTok(x);
-        }
-        else if (x.includes("facebook") || x.includes("reddit")){
-          pegarURL(x)
-          resMp4Outros(newurlInstagram)
-        }
-
-      }
-      catch{
-      }
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else if (x.includes("mp4")) {
-      divPadrao(x);
-      duvidaMp4();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x.includes("mp3 ")) {
-      try{
-        divPadrao(x);
-        if(x.includes("youtu.be/") || x.includes("youtube.com")){
-          pegarID(x);
-          resMp3(newurl)
-        }
-        else if(x.includes("spotify.com")){
-          resMp3Spotify(x)
-        }
-
-      }
-      catch{ 
-
-      }
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else if (x.includes("mp3")) {
-      divPadrao(x);
-      duvidaMp3();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x == "lang" || x == "idioma" || x == "language" || x == "lingua") {
-      divPadrao(x);
-      resLang();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x == "netinfo" || x=="ipconfig" || x=="ip") {
-      divPadrao(x);
-      resNetInfo();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x ==("iploc")) {
-      divPadrao(x);
-      duvidaIploc(x);
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x.startsWith("iploc ")) {
-      divPadrao(x);
-      pegarIP(x);
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x == "qr") {
-      divPadrao(x);
-      duvidaQR();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x.startsWith("qr ")) {
-      divPadrao(x);
-      resQR(x);
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x ==("short")) {
-      divPadrao(x);
-      duvidaShort();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x.startsWith("short ")) {
-      divPadrao(x);
-      resShort(x);
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x ==("msg") || x==("wpp")) {
-      divPadrao(x);
-      duvidaWpp();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x.startsWith("wpp ")) {
-      divPadrao(x);
-      resmandarMsg(x);
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x ==("arquivo") || (x == "arq")) {
-      divPadrao(x);
-      duivdaArquivo(x);
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-
-    else if (x ==("arquivo cachepass") || (x == "arq cachepass")) {
-      divPadrao(x);
-      resArquivoCachePass(x);
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else if (x ==("read") || (x == "ler")) {
-      divPadrao(x);
-      duvidaRead();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else if (x.startsWith("read ") || x.startsWith("ler ")) {
-      divPadrao(x);
-      resRead(x);
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else if (x ==("ai") || (x == "ia") || (x == "chat")){
-      divPadrao(x);
-      duvidaIA();
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else if (x.startsWith("ai ") || x.startsWith("ia ") || x.startsWith("chat ")) {
-      divPadrao(x);
-      resIA(x);
-      autoScrollDown();
-      _input.value= "";
-      return false;
-    }
-    else {
-      comandoInvalido(x);
-      autoScrollDown();
-      _input.value= "";
-    }
-    return
+  if(!x.startsWith("mp")){
+    x = x.toLowerCase();
   }
+
+  if (x == "help" || x == "ajuda") {
+    divPadrao(x);
+    resHelp();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x == "color") {
+    divPadrao(x);
+    resColor();
+    _input.value= "";
+    autoScrollDown();
+    return false;
+  }
+  else if (x == "color green") {
+    divPadrao(x);
+    resColorGreen();
+    autoScrollDown();
+    colorirDivPadrao();
+    _input.value= "";
+    return false;
+  }
+  else if (x == "color red") {
+    divPadrao(x);
+    resColorRed();
+    autoScrollDown();
+    colorirDivPadrao();
+    _input.value= "";
+    return false;
+  }
+  else if (x == "color blue") {
+    divPadrao(x);
+    resColorBlue();
+    autoScrollDown();
+    colorirDivPadrao();
+    _input.value= "";
+    return false;
+  }
+  else if (x == "color white") {
+    divPadrao(x);
+    resColorWhite();
+    autoScrollDown();
+    colorirDivPadrao();
+    _input.value= "";
+    return false;
+  }
+  else if (x == "color pink") {
+    divPadrao(x);
+    resColorPink();
+    autoScrollDown();
+    colorirDivPadrao();
+    _input.value= "";
+    return false;
+  }
+  else if (x == "color yellow") {
+    divPadrao(x);
+    resColorYellow();
+    autoScrollDown();
+    colorirDivPadrao();
+    _input.value= "";
+    return false;
+  }
+  else if (x == "clear" || x== "cls") {
+    divPadrao(x);
+    resClear();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x == "sobre" || x=="about") {
+    divPadrao(x);
+    resSobre();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x == "fonte" || x=="font") {
+    divPadrao(x);
+    duvidaFonte();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x.includes("fonte ") || x.includes("font ")) {
+    divPadrao(x);
+    pegarFonteSize(x);
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+else if (x.startsWith("lang ")) {
+  const code = x.slice(5).trim();
+  setLanguage(code);          // já limpa a tela por dentro
+  autoScrollDown();
+  _input.value = "";
+  return false;
+}
+  else if (x == "lang" || x == "idioma" || x == "language" || x == "lingua") {
+    divPadrao(x);
+    resLang();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x.includes("mp4 ")) {
+    try{
+      divPadrao(x);
+      if(x.includes("youtube.") || x.includes("yout.") || x.includes("youtu.")) {
+        pegarID(x);
+        resMp4Youtube(newurl);
+      }
+      else if (x.includes("instagram") && x.includes("/highlights/")) {
+        pegarURL(x);
+        type = 'highlights';
+        resMp4Instagram(newurlInstagram, type);
+      }
+      else if (x.includes("instagram") && x.includes("/stories/")) {
+        pegarURL(x);
+        type = 'stories';
+        resMp4Instagram(newurlInstagram, type);
+      }
+      else if (x.includes("instagram") && x.includes("m/p/")) {
+        pegarURL(x);
+        type = 'post';
+        resMp4Instagram(newurlInstagram, type);
+      }
+      else if (x.includes("instagram") && x.includes("/reel/")) {
+        pegarURL(x);
+        type = 'post';
+        resMp4Instagram(newurlInstagram, type);
+      }
+      else if (x.includes("x.com") || x.includes("twitter")) {
+        pegarURL(x);
+        resMp4Twitter(newurlInstagram);
+      }
+      else if(x.includes("tiktok.")){
+        pegarURL(x);
+        resMp4TikTok(x);
+      }
+      else if (x.includes("facebook") || x.includes("reddit")){
+        pegarURL(x);
+        resMp4Outros(newurlInstagram);
+      }
+    }
+    catch{}
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x.includes("mp4")) {
+    divPadrao(x);
+    duvidaMp4();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x.includes("mp3 ")) {
+    try{
+      divPadrao(x);
+      if(x.includes("youtu.be/") || x.includes("youtube.com")){
+        pegarID(x);
+        resMp3(newurl);
+      }
+      else if(x.includes("spotify.com")){
+        resMp3Spotify(x);
+      }
+    }
+    catch{}
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x.includes("mp3")) {
+    divPadrao(x);
+    duvidaMp3();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x == "netinfo" || x=="ipconfig" || x=="ip") {
+    divPadrao(x);
+    resNetInfo();
+    _input.value= "";
+    return false;
+  }
+  else if (x ==("iploc")) {
+    divPadrao(x);
+    duvidaIploc(x);
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x.startsWith("iploc ")) {
+    divPadrao(x);
+    pegarIP(x);
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x == "qr") {
+    divPadrao(x);
+    duvidaQR();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x.startsWith("qr ")) {
+    divPadrao(x);
+    resQR(x);
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x ==("short")) {
+    divPadrao(x);
+    duvidaShort();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x.startsWith("short ")) {
+    divPadrao(x);
+    resShort(x);
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x ==("msg") || x==("wpp")) {
+    divPadrao(x);
+    duvidaWpp();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x.startsWith("wpp ")) {
+    divPadrao(x);
+    resmandarMsg(x);
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x ==("arquivo") || (x == "arq")) {
+    divPadrao(x);
+    duivdaArquivo(x);
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x ==("arquivo cachepass") || (x == "arq cachepass")) {
+    divPadrao(x);
+    resArquivoCachePass(x);
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x ==("read") || (x == "ler")) {
+    divPadrao(x);
+    duvidaRead();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x.startsWith("read ") || x.startsWith("ler ")) {
+    divPadrao(x);
+    resRead(x);
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x ==("ai") || (x == "ia") || (x == "chat")){
+    divPadrao(x);
+    duvidaIA();
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else if (x.startsWith("ai ") || x.startsWith("ia ") || x.startsWith("chat ")) {
+    divPadrao(x);
+    resIA(x);
+    autoScrollDown();
+    _input.value= "";
+    return false;
+  }
+  else {
+    comandoInvalido(x);
+    autoScrollDown();
+    _input.value= "";
+  }
+  return;
+}
