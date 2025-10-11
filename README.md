@@ -10,8 +10,6 @@ Interface web simulando um terminal — com várias APIs integradas, deploy pron
 O **Terminal** oferece uma experiência minimalista no navegador: parecida com um terminal real, mas com comandos que ativam APIs e scripts.  
 Está pronto para deploy usando funções serverless na **Vercel**.
 
-*(Insira aqui uma captura de tela da interface caso queira ilustrar)*
-
 ---
 
 ## ⚡ Como funciona
